@@ -1,0 +1,6 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Include file="DragAndDrop\Load_DragAndDrop.xml"/>
+	<Script file="Create.lua"/>
+	<Script file='MinimapButtons.lua'/>
+	<Script file='Options.lua'/>
+</Ui>

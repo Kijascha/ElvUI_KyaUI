@@ -1,0 +1,15 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='MicroButtons.lua'/>    
+	<Script file='CharacterMicroButton.lua'/>
+	<Script file='SocialMicroButton.lua'/>
+	<Script file='GuildMicroButton.lua'/>
+	<Script file='AchievementMicroButton.lua'/>
+	<Script file='QuestLogMicroButton.lua'/>
+	<Script file='EJMicroButton.lua'/>
+	<Script file='LFDMicroButton.lua'/>
+	<Script file='SpellbookMicroButton.lua'/>    
+	<Script file='TalentMicroButton.lua'/>
+	<Script file='CollectionsMicroButton.lua'/>
+	<Script file='StoreMicroButton.lua'/>
+	<Script file='MainMenuMicroButton.lua'/>
+</Ui>

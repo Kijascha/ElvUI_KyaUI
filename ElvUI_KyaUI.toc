@@ -1,0 +1,22 @@
+## Interface: 90100
+## Author: KeYara
+## Version: 0.8
+## Title: |cffe3e3e3Kya|cffc74040UI|r
+## Notes: Contains a custom layout and some features, like a filter extension for the aura indicators.
+## Notes-deDE: Enthält ein spezielles Layout für ElvUI und einige Features wie eine Filter Erweiterung für die Aura Indikatoren.
+## RequiredDeps: ElvUI
+## DefaultState: enabled
+## SavedVariables: KYAData
+## SavedVariablesPerCharacter: KYADataPerChar
+## OptionalDeps: SharedMedia
+## X-Credits: Merathilis, Benik, Blazeflack, Azilroka, Simpy, NihilisticPandemonium, Darth Predator, fgprodigal, siweia, Solor, Elv
+## X-ElvuiVersion: 12.40
+
+Libraries\Load_Libraries.xml
+Locales\Load_Locales.xml
+Initialize.lua
+Settings\Load_Settings.xml
+Core\Load_Core.xml
+Modules\Load_Modules.xml
+Media\Load_Media.xml
+Layout\Load_Layout.xml

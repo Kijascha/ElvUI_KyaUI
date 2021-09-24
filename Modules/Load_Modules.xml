@@ -1,0 +1,6 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<!-- <Include file="DataBars\Load_DataBars.xml"/> -->
+	<Include file="MicroBar\Load_MicroBar.xml"/>
+	<Include file="MinimapButtons\Load_MinimapButtons.xml"/>
+	<Include file="UnitFrames\Load_UnitFrames.xml"/>
+</Ui>
