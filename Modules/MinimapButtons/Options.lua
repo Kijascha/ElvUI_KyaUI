@@ -20,6 +20,16 @@ local SnapToValues = {
     "MICROBAR",
 }
 
+local function get(info)
+    if not MB.db then return end
+	return MB.db[info[#info]];
+end
+
+local function set(info, value)
+    if not MB.db then return end
+	MB.db[info[#info]] = value or false;
+end
+
 local function MinimapButtonsOptions()
     E.Options.args.kyaui.args.minimapButtons = {
     order = 6,
@@ -37,16 +47,14 @@ local function MinimapButtonsOptions()
             name = L["Enable"],
             desc = "Toggle Minimap Buttons.",    
             get = function(info)
-                if not MB.db then return end
-                return MB.db[info[#info]]
+                return get(info);
             end,
             set = function(info, value)
-                if not MB.db then return end
-                MB.db[info[#info]] = value
+                set(info, value);
                 MB:Toggle()
             end,                    
         },
-        generalSettings ={ 
+        generalSettings = { 
             order = 3,
             name = "General Settings",
             disabled = function(info)
@@ -187,7 +195,61 @@ local function MinimapButtonsOptions()
                     end,         
                 },
             },
-        }
+        },
+        buttonGrid = {
+            order = 4,
+            type = "group",
+            name = "Button Bag",                    
+            get = function(info)
+                return get(info);
+            end,
+            set = function(info, value)
+                local selectedButton = get(info).args.buttons.selected
+                if selectedButton then print(get(info).args.buttons.get(get(info).args.buttons)) end
+
+                set(info, value);
+            end, 
+            args = {
+                buttons = {
+                    order = 1,
+                    type = "select",
+                    name = "All Buttons in the Bag.",
+                    values = function()
+                        local list = {}
+                        if MB.Bars["KyaUI_ButtonGrid"] and #MB.Bars["KyaUI_ButtonGrid"].Buttons > 0 then
+                            for k, v in pairs(MB.Bars["KyaUI_ButtonGrid"].Buttons) do 
+                                list[k] = v:GetName();
+                            end
+                        end 
+                        return list;
+                    end,
+                    
+                    get = function(info)
+                        return get(info);
+                    end,
+                    set = function(info, value)
+                        set(info, value);
+                        local values = E.Options.args.kyaui.args.minimapButtons.args.buttonGrid.args.buttons.values()
+                        MB.db["slotID"] = tostring(value);
+                        MB.db["SlotName"] = values[value];
+                    end, 
+                },
+                slotID = {
+                    order = 2,
+                    type = "input",
+                    name = "Slot ID: ",
+                    get = function(info) return get(info); end,
+                    set = nil,
+                },
+                SlotName = {
+                    order = 3,
+                    type = "input",
+                    name = "Slot Name: ",
+                    get = function(info) return get(info); end,
+                    set = nil,
+                },
+            },
+        },
     },
 }
 end

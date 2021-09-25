@@ -188,6 +188,7 @@ function MB.Core:CreateButtonGrid()
             point.XOffSet or 0,
             point.YOffSet or 0);	
         
+        
         E:CreateMover(bar, barName.."Mover", barName, nil, nil, nil, "ALL,MINIMAP,KYAUI", nil, "kyaui,buttonGrid")
     
         return true;
@@ -267,18 +268,6 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button,UpdateFunc)
         self.isDragging = true;
 
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
-        --[[ self:StartMoving();
-        self.isDragging = true;
-        
-		self.oldWidth = self:GetWidth();
-		self.oldHeight = self:GetHeight();
-        self.oldIconWidth = self.icon:GetWidth();
-        self.oldIconHeight = self.icon:GetWidth();
-        local scalingFactor = 0.8
-        self:SetSize(self.oldWidth*scalingFactor,self.oldHeight*scalingFactor);
-        self.icon:SetSize(self.oldIconWidth*scalingFactor,self.oldIconHeight*scalingFactor);		
-        self.isDroppable = false;
-        self.newEmptySlot = nil; ]]
     end)
     Button:SetScript("OnDragStop", function(self) 
         local success, slot = MB.DragAndDrop:Drop(self);
@@ -286,24 +275,36 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button,UpdateFunc)
         self.isDragging = false;
         
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
+
+        local prevParent = self:GetParent();
         if success then
+            
+            prevParent.isEmpty = true;
+            prevParent.MinimapButton = nil;
+            slot.isEmpty = false;
+            slot.MinimapButton = self;
+
             MB.DragAndDrop:AttachToSlot(self, slot);
         elseif (self:GetParent() ~= E.UIParent or self:GetParent() ~= UIParent) then
             MB.DragAndDrop:AttachToSlot(self, self:GetParent());
         end
-        --[[ self:StopMovingOrSizing();
-        self.isDragging = false;
-        self:SetSize(self.oldWidth,self.oldHeight);
-        self.icon:SetSize(self.oldIconWidth,self.oldIconHeight);
-        print(tostring(self.isDroppable))
-        if self.isDroppable and self.newEmptySlot ~= self:GetParent() then -- Letzte Änderung 19.09.2021 21:48 Uhr
-            MB:SnapTo(self, self.newEmptySlot);
-        else
-            print(self:GetParent():GetName())
-            MB:SnapTo(self, self:GetParent());
-        end
-        
-		SaveButtonListToDB(MB.Bars["KyaUI_ButtonGrid"]) ]]
+        if not V.kyaui.minimapButtons then return end
+
+		-- Grab current button setup
+		local currentButtonList = MB.Bars["KyaUI_ButtonGrid"].Buttons;
+		local savedButtonList =  {};
+
+		for i = 1, #currentButtonList do 
+			local set = {					
+				SlotID = i,
+				SlotName = currentButtonList[i]:GetName() or "",
+				IsEmpty = currentButtonList[i].isEmpty or false,
+				MinimapButton = currentButtonList[i].MinimapButton or nil,
+			}
+            --print(tostring(set.SlotName).." - "..tostring(set.IsEmpty))
+			savedButtonList[i] = set;
+		end
+		MB.db.bars.buttonGrid.buttons = savedButtonList;
    end)
 end
 function MB.Core:GrabMinimapButtons()

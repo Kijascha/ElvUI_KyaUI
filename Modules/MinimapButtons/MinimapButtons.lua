@@ -56,7 +56,11 @@ local countButtons = 0
 				-- Load the last arranged ButtonList from DB
 				-- sort the minimap buttons accordingly
 			]] 
-
+			if V.kyaui.minimapButtons.bars.buttonGrid.Slots then
+				for k,v in pairs(V.kyaui.minimapButtons.bars.buttonGrid.Slots) do
+					print(string.format("Index: %d - Value.SlotID: %d - Value.SlotName: %s", i, v.SlotID,v.SlotName))
+				end
+			end
 			-- get all grabbed minimap buttons
 			local grabbedButtons = MB.GrabbedMinimapButtons;
 			-- create a new and empty List
@@ -77,6 +81,8 @@ local countButtons = 0
 					}
 					-- Save it to the Profile DB
 			]] 
+			
+
 			MB.inThisWorld = false;
 			print("leaving this crazy world")
 		end
@@ -106,6 +112,9 @@ local countButtons = 0
 		if not MB.db then return end -- Do nothing if db is not initialized
 		if not MB.db.enabled then return end -- Do nothing if module is not enabled
 		if not MB.inThisWorld then return end
+
+		
+
 		-- DO UPDATE STUFF
 		if bar:GetName() == "KyaUI_ButtonGrid" then 
 			if bar.Buttons then
@@ -129,32 +138,54 @@ local countButtons = 0
 					bar.Buttons[i]:SetPoint('LEFT',bar, position,0)	
 					
 					bar.Buttons[i]:Show();
-				end
+				end						
+				
+				if MB.db.bars.buttonGrid.buttons then
+					for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
+						local slot = MB.Bars["KyaUI_ButtonGrid"].Buttons[k];
+						if slot:GetName() == v.SlotName then
+							print(tostring(v.SlotID).." - "..tostring(v.IsEmpty));
 
-				print(tostring(MB.GrabbedMinimapButtons))
-														
-				local index = 1					
-				for k,v in pairs(MB.GrabbedMinimapButtons) do
-					local grabbedButton = v;
+							if v.MinimapButton then
+								for kG,vG in pairs(MB.GrabbedMinimapButtons) do
+									local grabbedButton = vG;
+									
+									if not grabbedButton.isSkinned then
+										MB.Core:SkinGrabbedMinimapButton(grabbedButton);
+										grabbedButton.isSkinned = true;
+									end
+									if not grabbedButton.isDraggable then
+										MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
+										grabbedButton.isDraggable = true;
+									end
+									MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
+								end
+							end
+						end
+					end	
+				else					
+					local index = 1					
+					for k,v in pairs(MB.GrabbedMinimapButtons) do
+						local grabbedButton = v;
 
-					--print(grabbedButton:GetName())
-					MB.Core:SetParentForGrabbedMinimapButton(grabbedButton, bar.Buttons[index]);
-					--MB:SnapTo(grabbedButton, bar.Buttons[index])
-					if not grabbedButton.isSkinned then
-						--MB:SetParentForGrabbedMinimapButton(Button, Parent)
-						MB.Core:SkinGrabbedMinimapButton(grabbedButton);
-						grabbedButton.isSkinned = true;
+						MB.Core:SetParentForGrabbedMinimapButton(grabbedButton, bar.Buttons[index]);
+
+						if not grabbedButton.isSkinned then
+							MB.Core:SkinGrabbedMinimapButton(grabbedButton);
+							grabbedButton.isSkinned = true;
+						end
+						if not grabbedButton.isDraggable then
+							MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
+							grabbedButton.isDraggable = true;
+						end
+
+						-- Set to nil / true when dropping the Button on an other Slot
+						bar.Buttons[index].MinimapButton = grabbedButton;
+						bar.Buttons[index].isEmpty = false;
+						index = index + 1;
 					end
-					if not grabbedButton.isDraggable then
-						MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
-						grabbedButton.isDraggable = true;
-					end
+				end	
 
-					-- Set to nil / true when dropping the Button on an other Slot
-					bar.Buttons[index].MinimapButton = grabbedButton;
-					bar.Buttons[index].isEmpty = false;
-					index = index + 1;
-				end
 				bar:SetWidth(width);
 				bar:SetHeight(height);
 				
@@ -209,6 +240,7 @@ local countButtons = 0
 	function MB:Initialize()
 		-- set ProfileDB
 		MB.db = E.db.kyaui.minimapButtons
+		if not MB.db.bars.buttonGrid.buttons then MB.db.bars.buttonGrid.buttons = {} end
 		MB.loadedButtonsFromDB = false
 		if not MB.Core and not MB.Bars then return end
 
