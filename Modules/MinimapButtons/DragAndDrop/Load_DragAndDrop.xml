@@ -1,5 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file="DragAndDrop.lua"/>
+	<Script file="FindFirstEmptySlot.lua"/>
 	<Script file='ShrinkAndResize.lua'/>
 	<Script file='SnapToFrame.lua'/>
 	<Script file="Drag.lua"/>
