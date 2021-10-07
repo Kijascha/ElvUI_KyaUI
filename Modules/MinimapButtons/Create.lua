@@ -176,15 +176,18 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
 		local savedButtonList =  {};
 
 		for i = 1, #currentButtonList do 
+            if not currentButtonList[i].isEmpty then
 			local set = {					
 				SlotID = i,
-				SlotName = currentButtonList[i]:GetName() or "",
-				IsEmpty = currentButtonList[i].isEmpty or false,
-				MinimapButton = currentButtonList[i].MinimapButton or nil,
+				SlotName = currentButtonList[i]:GetName(),
+				IsEmpty = currentButtonList[i].isEmpty,
+				MinimapButton = currentButtonList[i].MinimapButton.Name,
 
 			}
+            print("DragStop: "..set.MinimapButton)
             --print(tostring(set.SlotName).." - "..tostring(set.IsEmpty))
 			savedButtonList[i] = set;
+        end
 		end
 		MB.db.bars.buttonGrid.buttons = savedButtonList;
    end)
@@ -199,9 +202,10 @@ function MB.Core:GrabMinimapButtons()
 
         button.isSkinned = false;
         button.isDraggable = false;
-        
-
+        print("GrabMinimapButtons: "..button:GetName())
+        button.Name = button:GetName();
         if addButton(button) then 
+
             if not button.isSkinned then
                 MB.Core:SkinGrabbedMinimapButton(button);
                 button.isSkinned = true;
@@ -210,7 +214,7 @@ function MB.Core:GrabMinimapButtons()
                 MB.Core:MakeGrabbedMinimapButtonsDraggable(button)
                 button.isDraggable = true;
             end
-            print(n .. " - " .. button:GetName())
+            --print(n .. " - " .. button:GetName())
             --print("SUCCESS| Button: "..button:GetName().." successfully grabbed.")
         else
             --print("ERROR| Button: "..button:GetName().." couldn't be grabbed!.")

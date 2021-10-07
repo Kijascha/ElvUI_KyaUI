@@ -153,24 +153,39 @@ local countButtons = 0
 					end	]]
 				--else
 				--end	
-									
+					
 				for k,v in pairs(MB.GrabbedMinimapButtons) do
 					local grabbedButton = v;
 
 					local emptySlot = MB.DragAndDrop:FindFirstEmptySlot(bar);
 					MB.DragAndDrop:AttachToSlot(grabbedButton, emptySlot)
 
-					if not grabbedButton.isSkinned then
-						MB.Core:SkinGrabbedMinimapButton(grabbedButton);
-						grabbedButton.isSkinned = true;
-					end
-					if not grabbedButton.isDraggable then
-						MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton)
-						grabbedButton.isDraggable = true;
-					end
 					-- Set to nil / true when dropping the Button on an other Slot
 					emptySlot.MinimapButton = grabbedButton;
 					emptySlot.isEmpty = false;
+				end
+	
+				--[[
+					TODO:
+						- Sort all grabbedButtons according to the last saved status
+				]]
+				if MB.db.bars.buttonGrid.buttons then
+					local tempList = {}
+					local index = 1;
+					for i,j in pairs(MB.GrabbedMinimapButtons) do							
+						local grabbedButton = j;
+						for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
+							if grabbedButton:GetName() == v.MinimapButton then
+								print("Sorting Grabbed Buttons: "..grabbedButton:GetName()) 
+								local slot = MB.Bars.ButtonGrid.Buttons[v.SlotID]
+								
+								MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
+								-- Set to nil / true when dropping the Button on an other Slot
+								slot.MinimapButton = grabbedButton;
+								slot.isEmpty = false;
+							end
+						end
+					end
 				end
 				bar:SetWidth(width);
 				bar:SetHeight(height);
