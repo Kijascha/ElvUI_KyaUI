@@ -56,6 +56,9 @@ local countButtons = 0
 				-- Load the last arranged ButtonList from DB
 				-- sort the minimap buttons accordingly
 			]] 
+
+			MB.Core:GrabMinimapButtons()
+
 			if V.kyaui.minimapButtons.bars.buttonGrid.Slots then
 				for k,v in pairs(V.kyaui.minimapButtons.bars.buttonGrid.Slots) do
 					print(string.format("Index: %d - Value.SlotID: %d - Value.SlotName: %s", i, v.SlotID,v.SlotName))
@@ -65,26 +68,10 @@ local countButtons = 0
 			local grabbedButtons = MB.GrabbedMinimapButtons;
 			-- create a new and empty List
 			local newGrabbedButtons = {}
-
 			MB.inThisWorld = true;
-			print("entering this crazy world")
+			print("entering this crazy world") -- to be removed
 		elseif event =="PLAYER_LEAVING_WORLD" then
-			--[[ TODO:
-				-- Get the new arranged ButtonList
-				-- Save it to the DB
-					-- Create a Data set:
-					local set = {
-						SlotID = IndexOfTheSlots,
-						SLotName = NameOfTheSlot,
-						IsEmpty = True/False,
-						MinimapButton = NameOfTheButton,
-					}
-					-- Save it to the Profile DB
-			]] 
-			
-
 			MB.inThisWorld = false;
-			print("leaving this crazy world")
 		end
 	end
 	local function OnClick(self,button)
@@ -113,7 +100,7 @@ local countButtons = 0
 		if not MB.db.enabled then return end -- Do nothing if module is not enabled
 		if not MB.inThisWorld then return end
 
-		
+		if not MB.Bars then return end
 
 		-- DO UPDATE STUFF
 		if bar:GetName() == "KyaUI_ButtonGrid" then 
@@ -140,8 +127,8 @@ local countButtons = 0
 					bar.Buttons[i]:Show();
 				end						
 				
-				if MB.db.bars.buttonGrid.buttons then
-					for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
+				--if MB.db.bars.buttonGrid.buttons then
+					--[[for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
 						local slot = MB.Bars["KyaUI_ButtonGrid"].Buttons[k];
 						if slot:GetName() == v.SlotName then
 							print(tostring(v.SlotID).." - "..tostring(v.IsEmpty));
@@ -149,43 +136,35 @@ local countButtons = 0
 							if v.MinimapButton then
 								for kG,vG in pairs(MB.GrabbedMinimapButtons) do
 									local grabbedButton = vG;
-									
-									if not grabbedButton.isSkinned then
-										MB.Core:SkinGrabbedMinimapButton(grabbedButton);
-										grabbedButton.isSkinned = true;
+									if v.MinimapButton.Name == grabbedButton:GetName() then
+										print(v.MinimapButton.Name)
+										if not grabbedButton.isSkinned then
+											MB.Core:SkinGrabbedMinimapButton(grabbedButton);
+											grabbedButton.isSkinned = true;
+										end
+										if not grabbedButton.isDraggable then
+											MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
+											grabbedButton.isDraggable = true;
+										end
+										MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
 									end
-									if not grabbedButton.isDraggable then
-										MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
-										grabbedButton.isDraggable = true;
-									end
-									MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
 								end
 							end
 						end
-					end	
-				else					
-					local index = 1					
-					for k,v in pairs(MB.GrabbedMinimapButtons) do
-						local grabbedButton = v;
+					end	]]
+				--else
+				--end	
+									
+				for k,v in pairs(MB.GrabbedMinimapButtons) do
+					local grabbedButton = v;
 
-						MB.Core:SetParentForGrabbedMinimapButton(grabbedButton, bar.Buttons[index]);
+					local emptySlot = MB.DragAndDrop:FindFirstEmptySlot(bar);
+					MB.DragAndDrop:AttachToSlot(grabbedButton, emptySlot)
 
-						if not grabbedButton.isSkinned then
-							MB.Core:SkinGrabbedMinimapButton(grabbedButton);
-							grabbedButton.isSkinned = true;
-						end
-						if not grabbedButton.isDraggable then
-							MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
-							grabbedButton.isDraggable = true;
-						end
-
-						-- Set to nil / true when dropping the Button on an other Slot
-						bar.Buttons[index].MinimapButton = grabbedButton;
-						bar.Buttons[index].isEmpty = false;
-						index = index + 1;
-					end
-				end	
-
+					-- Set to nil / true when dropping the Button on an other Slot
+					emptySlot.MinimapButton = grabbedButton;
+					emptySlot.isEmpty = false;
+				end
 				bar:SetWidth(width);
 				bar:SetHeight(height);
 				
@@ -206,16 +185,20 @@ local countButtons = 0
 		if MB.db.enabled then
 			MB:UpdateMinimapButtons()
 			if MB.Bars then
+				for k,v in pairs(MB.Bars) do print(k) end
 				for key,bar in pairs(MB.Bars) do
-					bar:RegisterEvent("PLAYER_ENTERING_WORLD")
-					bar:RegisterEvent("PLAYER_LEAVING_WORLD")
-					bar:SetScript("OnEvent", function(self, event, ...)
-						OnEvent(self,event,...);
-						MB:UpdateBar(self)
-					end)
-					if bar.mover then
-						MB:UpdateBar(bar)
-						E:EnableMover(bar.mover:GetName())
+					
+					if key == "QuickAccessBar" or key == "ButtonGrid" then
+						bar:RegisterEvent("PLAYER_ENTERING_WORLD")
+						bar:RegisterEvent("PLAYER_LEAVING_WORLD")
+						bar:SetScript("OnEvent", function(self, event, ...)
+							OnEvent(self,event,...);
+							MB:UpdateBar(self)
+						end)
+						if bar.mover then
+							MB:UpdateBar(bar)
+							E:EnableMover(bar.mover:GetName())
+						end
 					end
 				end
 			end
@@ -224,12 +207,15 @@ local countButtons = 0
 			
 			if MB.Bars then
 				for key,bar in pairs(MB.Bars) do
-					bar:UnregisterEvent("PLAYER_ENTERING_WORLD")
-					bar:UnregisterEvent("PLAYER_LEAVING_WORLD")
-					bar:SetScript("OnEvent", nil)
-					if bar.mover then
-						MB:UpdateBar(bar)
-						E:DisableMover(bar.mover:GetName())
+					
+					if key == "QuickAccessBar" or key == "ButtonGrid" then
+						bar:UnregisterEvent("PLAYER_ENTERING_WORLD")
+						bar:UnregisterEvent("PLAYER_LEAVING_WORLD")
+						bar:SetScript("OnEvent", nil)
+						if bar.mover then
+							MB:UpdateBar(bar)
+							E:DisableMover(bar.mover:GetName())
+						end
 					end
 				end
 			end
@@ -244,11 +230,11 @@ local countButtons = 0
 		MB.loadedButtonsFromDB = false
 		if not MB.Core and not MB.Bars then return end
 
-		MB.Core:CreateQuickAccessBar()
-		MB.Core:CreateButtonGrid()
-	
-		MB.Core:GrabMinimapButtons()
-		
+		if not MB.Bars.QuickAccessBar then MB.Bars:CreateQuickAccessBar() end			
+		if not MB.Bars.ButtonGrid then MB.Bars:CreateButtonGrid() end
+		--MB.Core:CreateQuickAccessBar()
+		--MB.Core:CreateButtonGrid()
+
 		MB:Toggle()
 		
 		MB.Initialized = true
