@@ -10,7 +10,7 @@ function MB.DragAndDrop:FindFirstEmptySlot(frame)
     
     for i = 1, #frame.Buttons do
         if frame.Buttons[i].isEmpty then 
-            slot = frame.Button[i];
+            slot = frame.Buttons[i];
             break;
         end
     end    
