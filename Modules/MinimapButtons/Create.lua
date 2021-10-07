@@ -143,8 +143,8 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
     Button:HookScript("OnUpdate", function(self) 
     end)
     Button:SetScript("OnDragStart", function(self) 
-        if not MB.Bars["KyaUI_ButtonGrid"] then return end
-        MB.DragAndDrop:DragStart(self, MB.Bars["KyaUI_ButtonGrid"].Buttons);
+        if not MB.Bars.ButtonGrid then return end
+        MB.DragAndDrop:DragStart(self, MB.Bars.ButtonGrid.Buttons);
         self.isDragging = true;
 
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
@@ -172,7 +172,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
         if not V.kyaui.minimapButtons then return end
 
 		-- Grab current button setup
-		local currentButtonList = MB.Bars["KyaUI_ButtonGrid"].Buttons;
+		local currentButtonList = MB.Bars.ButtonGrid.Buttons;
 		local savedButtonList =  {};
 
 		for i = 1, #currentButtonList do 
@@ -200,6 +200,7 @@ function MB.Core:GrabMinimapButtons()
         button.isSkinned = false;
         button.isDraggable = false;
         
+
         if addButton(button) then 
             if not button.isSkinned then
                 MB.Core:SkinGrabbedMinimapButton(button);

@@ -216,8 +216,8 @@ local function MinimapButtonsOptions()
                     name = "All Buttons in the Bag.",
                     values = function()
                         local list = {}
-                        if MB.Bars["KyaUI_ButtonGrid"] and #MB.Bars["KyaUI_ButtonGrid"].Buttons > 0 then
-                            for k, v in pairs(MB.Bars["KyaUI_ButtonGrid"].Buttons) do 
+                        if MB.Bars["ButtonGrid"] and #MB.Bars["ButtonGrid"].Buttons > 0 then
+                            for k, v in pairs(MB.Bars["ButtonGrid"].Buttons) do 
                                 list[k] = v:GetName();
                             end
                         end 

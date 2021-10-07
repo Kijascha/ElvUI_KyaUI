@@ -69,7 +69,6 @@ local countButtons = 0
 			-- create a new and empty List
 			local newGrabbedButtons = {}
 			MB.inThisWorld = true;
-			print("entering this crazy world") -- to be removed
 		elseif event =="PLAYER_LEAVING_WORLD" then
 			MB.inThisWorld = false;
 		end
@@ -161,6 +160,14 @@ local countButtons = 0
 					local emptySlot = MB.DragAndDrop:FindFirstEmptySlot(bar);
 					MB.DragAndDrop:AttachToSlot(grabbedButton, emptySlot)
 
+					if not grabbedButton.isSkinned then
+						MB.Core:SkinGrabbedMinimapButton(grabbedButton);
+						grabbedButton.isSkinned = true;
+					end
+					if not grabbedButton.isDraggable then
+						MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton)
+						grabbedButton.isDraggable = true;
+					end
 					-- Set to nil / true when dropping the Button on an other Slot
 					emptySlot.MinimapButton = grabbedButton;
 					emptySlot.isEmpty = false;
