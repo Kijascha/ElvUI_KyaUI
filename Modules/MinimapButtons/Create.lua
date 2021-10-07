@@ -14,53 +14,9 @@ local texturesToRemove = {
 }
 
 if not MB.Core then MB.Core = {} end
-if not MB.Bars then MB.Bars = {} end
 if not MB.GrabbedMinimapButtons then MB.GrabbedMinimapButtons = {} end
 
---[[---------------------------------------
-            Private Bar Functions
--------------------------------------------]]
-local function barExists(Bar)
-    if not bar then return false end
-    if not bar.GetName then return false end
 
-    for barName, bar in pairs(MB.Bars) do
-        if barName == Bar:GetName() and bar == Bar then 
-            return true
-        end
-    end
-    return false;
-end
-local function getBarKey(bar)    
-    if barExists(bar) then
-        return bar:GetName();
-    end
-    return nil;
-end
-local function getBarByName(barName)
-    if barName then
-        return MB.Bars[barName];
-    end
-    return nil;
-end
-local function countBars()
-    return #MB.Bars;
-end
-local function addBar(bar)
-    if not barExists(bar) then
-        MB.Bars[bar:GetName()] = bar;
-        return true; --Successfully added
-    end
-    return false; --Addition failed!
-end
-local function removeBar(bar)
-    local index = getBarKey(bar);
-    if index then
-        tremove(MB.Bars,index);
-        return true; --Successfully removed
-    end
-    return false; --Deletion failed!
-end
 --[[---------------------------------------
             Private GrabbedMinimapButtons Functions
 -------------------------------------------]]
@@ -120,82 +76,6 @@ local function removeButton(Button)
     return false; --Deletion failed!
 end
 --[[---------------------------------------
-            Create Bars
--------------------------------------------]]
-
-local function CreateBar(Name, Parent)
-    if not MB.db then return end
-    if not MB.db.enabled then return end
-    if not MB.db.bars then return end
-
-    local point = MB.db.bars.defaultPoint;
-	local bar = CreateFrame("Frame",Name, Parent, "BackdropTemplate")
-	bar:SetPoint(
-        point.Point or "CENTER",
-        point.Anchor or Parent,
-        point.RelativePoint or "CENTER",
-        point.XOffSet or 0,
-        point.YOffSet or 0);
-	bar:SetFrameStrata("MEDIUM")
-	bar:EnableMouse(true)
-    bar:SetSize(MB.db.bars.defaultSize or 32, MB.db.bars.defaultSize or 32)
-	bar:SetScale(MB.db.bars.defaultScale or 1)
-	bar:SetTemplate(MB.db.bars.defaultTemplate or "Transparent")
-	E.FrameLocks[bar] = true
-		
-	bar.Buttons = {} 
-
-    return addBar(bar); -- return if either bar is successfully added or not
-end
-
-function MB.Core:CreateQuickAccessBar()
-    if not MB.db then return end
-    if not MB.db.bars.quickAccessBar then return end
-
-    local barName = "KyaUI_QuickAccessBar";
-    local parent = E.UIParent;
-    local point = MB.db.bars.quickAccessBar.defaultPoint;
-    
-    if CreateBar(barName, parent) then
-        local bar = getBarByName(barName)
-        bar:SetPoint(
-            point.Point or "RIGHT",
-            point.Anchor or parent,
-            point.RelativePoint or "RIGHT",
-            point.XOffSet or 0,
-            point.YOffSet or 0);	
-        
-        E:CreateMover(bar, barName.."Mover", barName, nil, nil, nil, "ALL,MINIMAP,KYAUI", nil, "kyaui,quickAccessBar")
-
-        return true;
-    end
-    return false;
-end
-function MB.Core:CreateButtonGrid()
-    if not MB.db then return end
-    if not MB.db.bars.buttonGrid then return end
-
-    local barName = "KyaUI_ButtonGrid";
-    local parent = E.UIParent;
-    local point = MB.db.bars.buttonGrid.defaultPoint;
-    
-    if CreateBar(barName, parent) then
-        local bar = getBarByName(barName)
-        bar:SetPoint(
-            point.Point or "CENTER",
-            point.Anchor or parent,
-            point.RelativePoint or "CENTER",
-            point.XOffSet or 0,
-            point.YOffSet or 0);	
-        
-        
-        E:CreateMover(bar, barName.."Mover", barName, nil, nil, nil, "ALL,MINIMAP,KYAUI", nil, "kyaui,buttonGrid")
-    
-        return true;
-    end
-    return false;
-end
---[[---------------------------------------
             Create Buttons
 -------------------------------------------]]
 
@@ -252,7 +132,7 @@ function MB.Core:SkinGrabbedMinimapButton(Button)
     Button.icon:SetSize(Button:GetWidth() * scalingFactor,Button:GetWidth() * scalingFactor)
     Button.icon:SetPoint("TOPLEFT", inset,-inset)
 end
-function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button,UpdateFunc)
+function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
     Button.isDragging = false;
     Button.isDroppable = false;
     Button.isReadyToDrop = false;
@@ -283,7 +163,8 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button,UpdateFunc)
             prevParent.MinimapButton = nil;
             slot.isEmpty = false;
             slot.MinimapButton = self;
-
+            slot.MinimapButton.Name = self:GetName();
+            
             MB.DragAndDrop:AttachToSlot(self, slot);
         elseif (self:GetParent() ~= E.UIParent or self:GetParent() ~= UIParent) then
             MB.DragAndDrop:AttachToSlot(self, self:GetParent());
@@ -300,6 +181,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button,UpdateFunc)
 				SlotName = currentButtonList[i]:GetName() or "",
 				IsEmpty = currentButtonList[i].isEmpty or false,
 				MinimapButton = currentButtonList[i].MinimapButton or nil,
+
 			}
             --print(tostring(set.SlotName).." - "..tostring(set.IsEmpty))
 			savedButtonList[i] = set;
@@ -311,16 +193,26 @@ function MB.Core:GrabMinimapButtons()
     --[[----------------------------------------
                 Grab All LibDBIcons
     --------------------------------------------]]
+    local n = 1
 	for k,v in pairs(LDBIcon:GetButtonList()) do
         local button = LDBIcon:GetMinimapButton(v);
 
         button.isSkinned = false;
         button.isDraggable = false;
-
+        
         if addButton(button) then 
-            print("SUCCESS| Button: "..button:GetName().." successfully grabbed.")
+            if not button.isSkinned then
+                MB.Core:SkinGrabbedMinimapButton(button);
+                button.isSkinned = true;
+            end
+            if not button.isDraggable then
+                MB.Core:MakeGrabbedMinimapButtonsDraggable(button)
+                button.isDraggable = true;
+            end
+            print(n .. " - " .. button:GetName())
+            --print("SUCCESS| Button: "..button:GetName().." successfully grabbed.")
         else
-            print("ERROR| Button: "..button:GetName().." couldn't be grabbed!.")
+            --print("ERROR| Button: "..button:GetName().." couldn't be grabbed!.")
         end
 	end
 end
