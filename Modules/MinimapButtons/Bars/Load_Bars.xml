@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="Bars.lua"/>
+    <Script file="BarsDB.lua"/>
     <Script file="ButtonGrid.lua"/>
     <Script file="QuickAccess.lua"/>
 </Ui>
