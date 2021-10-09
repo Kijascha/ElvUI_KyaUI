@@ -8,7 +8,7 @@ local assert = assert
 local unpack = unpack
 local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
-
+local tContains = tContains
 local countButtons = 0
 
 --[[
@@ -61,7 +61,7 @@ local countButtons = 0
 
 			if V.kyaui.minimapButtons.bars.buttonGrid.Slots then
 				for k,v in pairs(V.kyaui.minimapButtons.bars.buttonGrid.Slots) do
-					print(string.format("Index: %d - Value.SlotID: %d - Value.SlotName: %s", i, v.SlotID,v.SlotName))
+					--print(string.format("Index: %d - Value.SlotID: %d - Value.SlotName: %s", i, v.SlotID,v.SlotName))
 				end
 			end
 			-- get all grabbed minimap buttons
@@ -122,76 +122,65 @@ local countButtons = 0
 					MB.Core:CreateSlot(bar, i, buttonName);
 					local position = buttonGrid.borderSpacing + buttonGrid.borderWidth + (i-1) * buttonSpacing + (i-1)*buttonSize;
 					bar.Buttons[i]:SetPoint('LEFT',bar, position,0)	
-					
+					bar.Buttons[i].MinimapButton = grabbedButton;
+					bar.Buttons[i].isEmpty = true;
 					bar.Buttons[i]:Show();
-				end						
-				
-				--if MB.db.bars.buttonGrid.buttons then
-					--[[for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
-						local slot = MB.Bars["KyaUI_ButtonGrid"].Buttons[k];
-						if slot:GetName() == v.SlotName then
-							print(tostring(v.SlotID).." - "..tostring(v.IsEmpty));
+				end	
 
-							if v.MinimapButton then
-								for kG,vG in pairs(MB.GrabbedMinimapButtons) do
-									local grabbedButton = vG;
-									if v.MinimapButton.Name == grabbedButton:GetName() then
-										print(v.MinimapButton.Name)
-										if not grabbedButton.isSkinned then
-											MB.Core:SkinGrabbedMinimapButton(grabbedButton);
-											grabbedButton.isSkinned = true;
-										end
-										if not grabbedButton.isDraggable then
-											MB.Core:MakeGrabbedMinimapButtonsDraggable(grabbedButton, Update)
-											grabbedButton.isDraggable = true;
-										end
-										MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
+				bar:SetWidth(width);
+				bar:SetHeight(height);				
+				
+				if MB.db.enabled then 
+					
+
+					--[[
+						Attach all grabbed Minimap Buttons on the Bar
+					]]
+					for k,v in pairs(MB.GrabbedMinimapButtons) do
+						local grabbedButton = v;
+	
+						local emptySlot = MB.DragAndDrop:FindFirstEmptySlot(bar);
+						MB.DragAndDrop:AttachToSlot(grabbedButton, emptySlot)
+	
+						-- Set to nil / true when dropping the Button on an other Slot
+						emptySlot.MinimapButton = grabbedButton;
+						emptySlot.isEmpty = false;
+					end
+		
+					--[[						
+						Reposition the grabbed Minimap Buttons according to the last session
+					]]
+					local savedLayout = MB.Bars.DB:LoadLayout(bar:GetName())
+					if savedLayout then
+						local tempList = {}
+						local index = 1;
+						for i,j in pairs(MB.GrabbedMinimapButtons) do							
+							local grabbedButton = j;
+							for k, v in pairs(savedLayout) do
+								if grabbedButton:GetName() == v.MinimapButton then
+									local slot = bar.Buttons[v.SlotID]
+	
+									local prevParent = grabbedButton:GetParent();
+											
+									if tContains(bar.Buttons, prevParent) then
+										prevParent.isEmpty = true;
+										prevParent.MinimapButton = nil;
 									end
+
+									slot.isEmpty = false;
+									slot.MinimapButton = grabbedButton;
+									slot.MinimapButton.Name = grabbedButton:GetName();
+									MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
 								end
 							end
 						end
-					end	]]
-				--else
-				--end	
-					
-				for k,v in pairs(MB.GrabbedMinimapButtons) do
-					local grabbedButton = v;
-
-					local emptySlot = MB.DragAndDrop:FindFirstEmptySlot(bar);
-					MB.DragAndDrop:AttachToSlot(grabbedButton, emptySlot)
-
-					-- Set to nil / true when dropping the Button on an other Slot
-					emptySlot.MinimapButton = grabbedButton;
-					emptySlot.isEmpty = false;
-				end
-	
-				--[[
-					TODO:
-						- Sort all grabbedButtons according to the last saved status
-				]]
-				if MB.db.bars.buttonGrid.buttons then
-					local tempList = {}
-					local index = 1;
-					for i,j in pairs(MB.GrabbedMinimapButtons) do							
-						local grabbedButton = j;
-						for k, v in pairs(MB.db.bars.buttonGrid.buttons) do
-							if grabbedButton:GetName() == v.MinimapButton then
-								print("Sorting Grabbed Buttons: "..grabbedButton:GetName()) 
-								local slot = MB.Bars.ButtonGrid.Buttons[v.SlotID]
-								
-								MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
-								-- Set to nil / true when dropping the Button on an other Slot
-								slot.MinimapButton = grabbedButton;
-								slot.isEmpty = false;
-							end
-						end
 					end
-				end
-				bar:SetWidth(width);
-				bar:SetHeight(height);
-				
-				
-				if MB.db.enabled then 
+					
+					--[[
+						Save current Minimap Buttons Layout
+					]]
+					MB.Bars.DB:SaveLayout(bar:GetName(), bar.Buttons);
+
 					bar:Show();
 				else
 					bar:Hide();
@@ -254,8 +243,6 @@ local countButtons = 0
 
 		if not MB.Bars.QuickAccessBar then MB.Bars:CreateQuickAccessBar() end			
 		if not MB.Bars.ButtonGrid then MB.Bars:CreateButtonGrid() end
-		--MB.Core:CreateQuickAccessBar()
-		--MB.Core:CreateButtonGrid()
 
 		MB:Toggle()
 		

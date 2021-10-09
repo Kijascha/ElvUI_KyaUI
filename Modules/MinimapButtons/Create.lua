@@ -78,7 +78,6 @@ end
 --[[---------------------------------------
             Create Buttons
 -------------------------------------------]]
-
 function MB.Core:CreateSlot(bar, slotNumber)	
     if not MB.db then return end
     if not bar then return end
@@ -171,25 +170,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
         end
         if not V.kyaui.minimapButtons then return end
 
-		-- Grab current button setup
-		local currentButtonList = MB.Bars.ButtonGrid.Buttons;
-		local savedButtonList =  {};
-
-		for i = 1, #currentButtonList do 
-            if not currentButtonList[i].isEmpty then
-			local set = {					
-				SlotID = i,
-				SlotName = currentButtonList[i]:GetName(),
-				IsEmpty = currentButtonList[i].isEmpty,
-				MinimapButton = currentButtonList[i].MinimapButton.Name,
-
-			}
-            print("DragStop: "..set.MinimapButton)
-            --print(tostring(set.SlotName).." - "..tostring(set.IsEmpty))
-			savedButtonList[i] = set;
-        end
-		end
-		MB.db.bars.buttonGrid.buttons = savedButtonList;
+		MB.Bars.DB:SaveLayout(MB.Bars.ButtonGrid:GetName(), MB.Bars.ButtonGrid.Buttons)
    end)
 end
 function MB.Core:GrabMinimapButtons()
@@ -202,7 +183,6 @@ function MB.Core:GrabMinimapButtons()
 
         button.isSkinned = false;
         button.isDraggable = false;
-        print("GrabMinimapButtons: "..button:GetName())
         button.Name = button:GetName();
         if addButton(button) then 
 
