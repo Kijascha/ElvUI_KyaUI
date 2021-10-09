@@ -105,20 +105,23 @@ local countButtons = 0
 		if bar:GetName() == "KyaUI_ButtonGrid" then 
 			if bar.Buttons then
 
-				local gridLayout = MB.db.bars.buttonGrid.gridLayout;
-				local slotCount = gridLayout.columns * gridLayout.rows;
+				local buttonGrid = MB.db.bars.buttonGrid; -- get button grid
+				local gridLayout = buttonGrid.gridLayout; -- Get the grid layout
+				local columns = gridLayout.columns; -- get number of columns
+				local rows = gridLayout.rows; -- get number of rows
 
-				local buttonGrid = MB.db.bars.buttonGrid;
-				local buttonsPerRow = buttonGrid.gridLayout.columns;				
+				local numberOfSlots = columns * rows;
+
+				local buttonsPerRow = columns;				
 				local buttonSpacing = buttonGrid.buttonSpacing;
 				local borderSpacing = 2*buttonGrid.borderSpacing;
 				local borderWidth = 2*buttonGrid.borderWidth;
-				local buttonSize = buttonGrid.buttonSize;
-
-				local width = slotCount*buttonSize + (slotCount-1) * buttonSpacing + borderSpacing + borderWidth;
-				local height = buttonSize + borderSpacing + borderWidth;	
+				local buttonSize = buttonGrid.buttonSize;	
 				
-				for i=1, slotCount do
+				--[[
+					Create slots
+				]]
+				for i=1, numberOfSlots do
 					MB.Core:CreateSlot(bar, i, buttonName);
 					local position = buttonGrid.borderSpacing + buttonGrid.borderWidth + (i-1) * buttonSpacing + (i-1)*buttonSize;
 					bar.Buttons[i]:SetPoint('LEFT',bar, position,0)	
@@ -127,12 +130,35 @@ local countButtons = 0
 					bar.Buttons[i]:Show();
 				end	
 
+				--[[ 
+					Apply grid layout 
+				]]
+				local index = 1
+				for j=1, rows do
+					local posY = buttonGrid.borderSpacing + buttonGrid.borderWidth + (j-1) * buttonSpacing + (j-1)*buttonSize;							
+					for i=1, columns do
+						local posX = buttonGrid.borderSpacing + buttonGrid.borderWidth + (i-1) * buttonSpacing + (i-1)*buttonSize;
+						
+						if j > 1 then
+							bar.Buttons[index]:SetPoint('TOPLEFT',bar, posX,-posY)
+						else
+							posY = buttonGrid.borderSpacing + buttonGrid.borderWidth;
+							bar.Buttons[index]:SetPoint('TOPLEFT',bar, posX,-posY)
+						end
+						index = index + 1
+					end
+				end
+
+				--[[
+					Set size
+				]]
+				local width = columns*buttonSize + (columns-1) * buttonSpacing + borderSpacing + borderWidth;
+				local height = rows*buttonSize + (rows-1) * buttonSpacing + borderSpacing + borderWidth;
+
 				bar:SetWidth(width);
 				bar:SetHeight(height);				
 				
-				if MB.db.enabled then 
-					
-
+				if MB.db.enabled then
 					--[[
 						Attach all grabbed Minimap Buttons on the Bar
 					]]
