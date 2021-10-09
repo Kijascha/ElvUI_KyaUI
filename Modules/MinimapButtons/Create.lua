@@ -156,7 +156,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
 
         local prevParent = self:GetParent();
-        if success then
+        if success  and slot.isEmpty then
             
             prevParent.isEmpty = true;
             prevParent.MinimapButton = nil;
