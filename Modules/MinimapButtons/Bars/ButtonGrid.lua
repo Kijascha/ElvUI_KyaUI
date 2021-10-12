@@ -23,7 +23,7 @@ function MB.Bars:CreateButtonGrid()
             point.XOffSet or 0,
             point.YOffSet or 0);	
             
-        E:CreateMover(bar, "KyaUI_"..barName.."Mover", "KyaUI_"..barName, nil, nil, nil, "ALL,MINIMAP,KYAUI", nil, "kyaui,buttonGrid")
+        --E:CreateMover(bar, "KyaUI_"..barName.."Mover", "KyaUI_"..barName, nil, nil, nil, "ALL,MINIMAP,KYAUI", nil, "kyaui,buttonGrid")
         return true;
     end
     return false;

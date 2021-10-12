@@ -75,6 +75,11 @@ local function removeButton(Button)
     end
     return false; --Deletion failed!
 end
+local function getMinimapButtonIcon(IconName)
+	local IconPath = "Interface\\AddOns\\ElvUI_KyaUI\\Media\\Textures\\Icons\\MinimapButtons\\";
+	local ending = ".tga";
+	return (IconPath..IconName..ending);
+end
 --[[---------------------------------------
             Create Buttons
 -------------------------------------------]]
@@ -99,7 +104,42 @@ function MB.Core:CreateSlot(bar, slotNumber)
     bar.Buttons[slotNumber].MinimapButton = nil;
     bar.Buttons[slotNumber].tooltipText = ''
 end
+function MB.Core:CreateToggleButton()
+    if not MB.Bars then return end;
+    local toggleBTN = CreateFrame("BUTTON","KyaUI_ToggleButtoBag", E.UIParent, "SecureActionButtonTemplate");
+    toggleBTN:SetSize(32,32);
+    toggleBTN:SetPoint("RIGHT",E.UIParent, "RIGHT", 0,0);
+    toggleBTN:SetTemplate("Transparent");
 
+    toggleBTN.Icon = toggleBTN:CreateTexture();
+    toggleBTN.Icon:SetPoint("CENTER", toggleBTN, "CENTER", 0, 0)
+    toggleBTN.Icon:SetTexture(133640);
+    toggleBTN.Icon:SetTexCoord(.08,.92,.08,.92);
+    toggleBTN.Icon:SetSize(28,28);
+
+    toggleBTN:SetScript("OnMouseUp", function(self) 
+        self.Icon:SetSize(28,28)
+    end)
+    
+    toggleBTN:SetScript("OnMouseDown", function(self) 
+        self.Icon:SetSize(24,24)
+    end)
+    toggleBTN:SetScript("OnClick", function(self) 
+        if MB.Bars.ButtonGrid:IsShown() then 
+            MB.Bars.ButtonGrid:Hide();
+        else
+            MB.Bars.ButtonGrid:Show();
+        end
+    end)
+
+    toggleBTN:Show();
+    MB.Bars.ToggleButtonBag = toggleBTN;
+
+    if MB.Bars.ButtonGrid then
+        MB.Bars.ButtonGrid:SetPoint("TOPRIGHT",MB.Bars.ToggleButtonBag,"BOTTOMRIGHT",2,-4);
+        MB.Bars.ButtonGrid:Hide();
+    end
+end
 function MB.Core:SetParentForGrabbedMinimapButton(Button, Parent)
     if not Button then return end
     if not Parent then return end
@@ -143,7 +183,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
     end)
     Button:SetScript("OnDragStart", function(self) 
         if not MB.Bars.ButtonGrid then return end
-        MB.DragAndDrop:DragStart(self, MB.Bars.ButtonGrid.Buttons);
+        MB.DragAndDrop:DragStart(self, MB.Bars.AllowedFrames);
         self.isDragging = true;
 
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
@@ -171,6 +211,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
         if not V.kyaui.minimapButtons then return end
 
 		MB.Bars.DB:SaveLayout(MB.Bars.ButtonGrid:GetName(), MB.Bars.ButtonGrid.Buttons)
+        MB.Bars.DB:SaveLayout(MB.Bars.QuickAccessBar:GetName(), MB.Bars.QuickAccessBar.Buttons)
    end)
 end
 function MB.Core:GrabMinimapButtons()

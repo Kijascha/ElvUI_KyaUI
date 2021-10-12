@@ -210,44 +210,6 @@ local function MinimapButtonsOptions()
                 set(info, value);
             end, 
             args = {
-                buttons = {
-                    order = 1,
-                    type = "select",
-                    name = "All Buttons in the Bag.",
-                    values = function()
-                        local list = {}
-                        if MB.Bars["ButtonGrid"] and #MB.Bars["ButtonGrid"].Buttons > 0 then
-                            for k, v in pairs(MB.Bars["ButtonGrid"].Buttons) do 
-                                list[k] = v:GetName();
-                            end
-                        end 
-                        return list;
-                    end,
-                    
-                    get = function(info)
-                        return get(info);
-                    end,
-                    set = function(info, value)
-                        set(info, value);
-                        local values = E.Options.args.kyaui.args.minimapButtons.args.buttonGrid.args.buttons.values()
-                        MB.db["slotID"] = tostring(value);
-                        MB.db["SlotName"] = values[value];
-                    end, 
-                },
-                slotID = {
-                    order = 2,
-                    type = "input",
-                    name = "Slot ID: ",
-                    get = function(info) return get(info); end,
-                    set = nil,
-                },
-                SlotName = {
-                    order = 3,
-                    type = "input",
-                    name = "Slot Name: ",
-                    get = function(info) return get(info); end,
-                    set = nil,
-                },
             },
         },
     },

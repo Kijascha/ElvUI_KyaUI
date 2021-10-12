@@ -53,12 +53,13 @@ KP.minimapButtons = {
 			YOffSet = 0,
 		},
 		quickAccessBar = {
-			enabled = false,
+			enabled = true,
 			direction = 'HORIZONTAL',		
 			template = 'Transparent',
 			buttonSize = 32,
 			buttonSpacing = 1,
 			borderSpacing = 1,
+			borderWidth = 1,
 			slots = 5,
 			buttons = {},
 			defaultPoint = { 

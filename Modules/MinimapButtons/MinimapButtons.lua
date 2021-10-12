@@ -22,6 +22,18 @@ local countButtons = 0
 		- Recreate a Toggle for the button Bag
 		- Create a Config for Inserting into ElvUI_Options
 ]]
+	local function mergeTables(t1,t2)
+		if type(t1) == "table" and type(t2) == "table" then
+			local tOut = {}
+
+			local index = 1
+			for k,v in pairs(t1) do tOut[index] = v; index = index + 1; end			
+			for k,v in pairs(t2) do tOut[index] = v; index = index + 1; end
+
+			return tOut;
+		end
+		return nil;
+	end
 -- [[ Private MouseHandler Methods ]]
 
 	local sleep, timeSinceLastUpdate = 0.005,0
@@ -52,22 +64,10 @@ local countButtons = 0
 		if not MB.GrabbedMinimapButtons then return end
 
 		if event == "PLAYER_ENTERING_WORLD" then
-			--[[ TODO:
-				-- Load the last arranged ButtonList from DB
-				-- sort the minimap buttons accordingly
-			]] 
-
 			MB.Core:GrabMinimapButtons()
-
-			if V.kyaui.minimapButtons.bars.buttonGrid.Slots then
-				for k,v in pairs(V.kyaui.minimapButtons.bars.buttonGrid.Slots) do
-					--print(string.format("Index: %d - Value.SlotID: %d - Value.SlotName: %s", i, v.SlotID,v.SlotName))
-				end
+			if MB.Bars.ToggleButtonBag then
+				MB.Bars.ButtonGrid:Hide();
 			end
-			-- get all grabbed minimap buttons
-			local grabbedButtons = MB.GrabbedMinimapButtons;
-			-- create a new and empty List
-			local newGrabbedButtons = {}
 			MB.inThisWorld = true;
 		elseif event =="PLAYER_LEAVING_WORLD" then
 			MB.inThisWorld = false;
@@ -80,19 +80,7 @@ local countButtons = 0
 	local function OnLeave(self)
 	end
 
--- [[ Private Core Functions]]
-
--- [[ Private Create Methods ]]
-
-	------------------- Experimantal ----------------------
-
 -- [[ public Update Methods ]]
-	function MB:UpdateMinimapButtons()
-		if not MB.db then return end -- Do nothing if db not initialized
-
-		if not MB.ToggleBarsButton then return end
-		-- DO UPDATE STUFF
-	end
 	function MB:UpdateBar(bar)
 		if not bar then return end -- Do nothing if bar is nil or nopt initialized
 		if not MB.db then return end -- Do nothing if db is not initialized
@@ -122,13 +110,20 @@ local countButtons = 0
 					Create slots
 				]]
 				for i=1, numberOfSlots do
-					MB.Core:CreateSlot(bar, i, buttonName);
+					MB.Core:CreateSlot(bar, i);
 					local position = buttonGrid.borderSpacing + buttonGrid.borderWidth + (i-1) * buttonSpacing + (i-1)*buttonSize;
 					bar.Buttons[i]:SetPoint('LEFT',bar, position,0)	
-					bar.Buttons[i].MinimapButton = grabbedButton;
+					bar.Buttons[i].MinimapButton = nil;
 					bar.Buttons[i].isEmpty = true;
 					bar.Buttons[i]:Show();
 				end	
+
+				--[[
+					Store in AllowedFrames for drag and drop usage
+				]]
+				for i=1, #bar.Buttons do
+					tinsert(MB.Bars.AllowedFrames, bar.Buttons[i])
+				end
 
 				--[[ 
 					Apply grid layout 
@@ -213,6 +208,92 @@ local countButtons = 0
 				end
 			end
 		end
+
+		if bar:GetName() == "KyaUI_QuickAccessBar" then
+			if bar.Buttons then
+				
+				local quickAccessBar = MB.db.bars.quickAccessBar; -- get quick access bar
+
+				local numberOfSlots = quickAccessBar.slots + 1; -- just add an additional Slot for the toggle button
+			
+				local buttonSpacing = quickAccessBar.buttonSpacing;
+				local borderSpacing = 2*quickAccessBar.borderSpacing;
+				local borderWidth = 2*quickAccessBar.borderWidth;
+				local buttonSize = quickAccessBar.buttonSize;	
+				
+				--[[
+					Create slots
+				]]
+				for i=1, numberOfSlots do
+					MB.Core:CreateSlot(bar, i);
+					local position = quickAccessBar.borderSpacing + quickAccessBar.borderWidth + (i-1) * buttonSpacing + (i-1)*buttonSize;
+					bar.Buttons[i]:SetPoint('LEFT',bar, position,0)	
+					bar.Buttons[i].MinimapButton = nil;
+					bar.Buttons[i].isEmpty = true;
+					bar.Buttons[i]:Show();
+
+				end
+
+				--[[
+					Store in AllowedFrames for drag and drop usage
+				]]
+				for i=1, #bar.Buttons - 1 do
+					tinsert(MB.Bars.AllowedFrames, bar.Buttons[i])
+				end
+				if MB.Bars.AllowedFrames then
+					print(#MB.Bars.AllowedFrames)
+				end
+				--[[
+					Add Toggle Button for the button bag
+				]]
+				if MB.Bars.ToggleButtonBag then
+					MB.DragAndDrop:AttachToSlot(MB.Bars.ToggleButtonBag, bar.Buttons[#bar.Buttons])
+				end
+				
+				--[[
+					Set size
+				]]
+				local width = numberOfSlots*buttonSize + (numberOfSlots-1) * buttonSpacing + borderSpacing + borderWidth;
+				local height = buttonSize + borderSpacing + borderWidth;
+
+				bar:SetWidth(width);
+				bar:SetHeight(height);
+				
+		
+				--[[						
+					Reposition the grabbed Minimap Buttons according to the last session
+				]]
+				local savedLayout = MB.Bars.DB:LoadLayout(bar:GetName())
+				if savedLayout then
+					local tempList = {}
+					local index = 1;
+					for i,j in pairs(MB.GrabbedMinimapButtons) do							
+						local grabbedButton = j;
+						for k, v in pairs(savedLayout) do
+							if grabbedButton:GetName() == v.MinimapButton then
+								local slot = bar.Buttons[v.SlotID]
+								local prevParent = grabbedButton:GetParent();
+											
+								if tContains(bar.Buttons, prevParent) then
+									prevParent.isEmpty = true;
+									prevParent.MinimapButton = nil;
+								end
+
+								slot.isEmpty = false;
+								slot.MinimapButton = grabbedButton;
+								slot.MinimapButton.Name = grabbedButton:GetName();
+								MB.DragAndDrop:AttachToSlot(grabbedButton, slot)
+							end
+						end
+					end
+				end
+				
+				--[[
+					Save current Minimap Buttons Layout
+				]]
+				MB.Bars.DB:SaveLayout(bar:GetName(), bar.Buttons);
+			end
+		end
 	end
 
 -- [[ public Toggle Method ]]
@@ -220,7 +301,6 @@ local countButtons = 0
 		if not MB.db then return end
 
 		if MB.db.enabled then
-			MB:UpdateMinimapButtons()
 			if MB.Bars then
 				for k,v in pairs(MB.Bars) do print(k) end
 				for key,bar in pairs(MB.Bars) do
@@ -267,10 +347,13 @@ local countButtons = 0
 		MB.loadedButtonsFromDB = false
 		if not MB.Core and not MB.Bars then return end
 
+		MB.Bars.AllowedFrames = {}
 		if not MB.Bars.QuickAccessBar then MB.Bars:CreateQuickAccessBar() end			
 		if not MB.Bars.ButtonGrid then MB.Bars:CreateButtonGrid() end
 
+		MB.Core:CreateToggleButton()
 		MB:Toggle()
+		
 		
 		MB.Initialized = true
 	end
