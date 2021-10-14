@@ -196,6 +196,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
         MB.DragAndDrop:ShrinkAndResize(self, self.isDragging);
 
         local prevParent = self:GetParent();
+        --print(prevParent:GetName())
         if success  and slot.isEmpty then
             
             prevParent.isEmpty = true;
@@ -203,10 +204,23 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
             slot.isEmpty = false;
             slot.MinimapButton = self;
             slot.MinimapButton.Name = self:GetName();
-            
+
             MB.DragAndDrop:AttachToSlot(self, slot);
         elseif (self:GetParent() ~= E.UIParent or self:GetParent() ~= UIParent) then
-            MB.DragAndDrop:AttachToSlot(self, self:GetParent());
+            if prevParent.GetParent and prevParent:GetParent():GetName() == "KyaUI_QuickAccessBar" then
+                
+                prevParent.isEmpty = true;
+                prevParent.MinimapButton = nil;
+                local newSlot = MB.DragAndDrop:FindFirstEmptySlot(MB.Bars.ButtonGrid)
+                
+                newSlot.isEmpty = false;
+                newSlot.MinimapButton = self;
+                newSlot.MinimapButton.Name = self:GetName();
+
+                MB.DragAndDrop:AttachToSlot(self, newSlot);
+            else
+                MB.DragAndDrop:AttachToSlot(self, self:GetParent());
+            end
         end
         if not V.kyaui.minimapButtons then return end
 
@@ -235,10 +249,6 @@ function MB.Core:GrabMinimapButtons()
                 MB.Core:MakeGrabbedMinimapButtonsDraggable(button)
                 button.isDraggable = true;
             end
-            --print(n .. " - " .. button:GetName())
-            --print("SUCCESS| Button: "..button:GetName().." successfully grabbed.")
-        else
-            --print("ERROR| Button: "..button:GetName().." couldn't be grabbed!.")
         end
 	end
 end

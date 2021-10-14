@@ -58,24 +58,24 @@ function MB.DragAndDrop:SnapToFrame(frameA, frameB, left, top, right, bottom)
 
     -- FrameA is over BOTTOMLEFT of FrameB
     if isOverBottomLeft then
-        print(string.format("%s is over BOTTOMLEFT of %s", frameA:GetName(), frameB:GetName()))  
+        --print(string.format("%s is over BOTTOMLEFT of %s", frameA:GetName(), frameB:GetName()))  
         snap = true;     
     -- FrameA is over TOPLEFT of FrameB
     elseif isOverTopLeft then
-        print(string.format("%s is over TOPLEFT of %s", frameA:GetName(), frameB:GetName()))
+        --print(string.format("%s is over TOPLEFT of %s", frameA:GetName(), frameB:GetName()))
         snap = true;
     -- FrameA is over TOPRIGHT of FrameB
     elseif isOverTopRight then
-        print(string.format("%s is over TOPRIGHT of %s", frameA:GetName(), frameB:GetName()))
+        --print(string.format("%s is over TOPRIGHT of %s", frameA:GetName(), frameB:GetName()))
         snap = true;
     -- FrameA is over BOTTOMRIGHT of FrameB
     elseif isOverBottomRight then
-        print(string.format("%s is over BOTTOMRIGHT of %s", frameA:GetName(), frameB:GetName()))
+        --print(string.format("%s is over BOTTOMRIGHT of %s", frameA:GetName(), frameB:GetName()))
         snap = true;
     end
     
     if isOverBottomLeft or isOverTopLeft or isOverTopRight or isOverBottomRight then
-        print(string.format("%s is over %s", frameA:GetName(), frameB:GetName()))
+        --print(string.format("%s is over %s", frameA:GetName(), frameB:GetName()))
         newX = xA
         newY = yA
         snap = true;

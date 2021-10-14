@@ -22,6 +22,7 @@ function MB.Bars.DB:SaveLayout(barName, buttonLayout)
                 MinimapButton = currentButtonLayout[i].MinimapButton.Name,
 
             }
+            print("Slot: ".. set.SlotName .. " - IsEmpty: " .. tostring(set.IsEmpty) .. " - " .. tostring(set.MinimapButton))
             savedButtonLayout[i] = set;
         end
     end

@@ -24,9 +24,12 @@ function MB.DragAndDrop:Drag(frame, frameList, xoffset, yoffset, left, top, righ
             for k,v in pairs(frameList) do
                 if frame ~= v and frame ~= v:GetParent() and not IsShiftKeyDown() and v:IsVisible()  then 
                     if self:SnapToFrame(frame, v, left, top, right, bottom) then
+                        --print("over allowed Frame: "..v:GetName())
                         MB.DragAndDrop.Sticky[frame] = v
                         break
                     end
+                else                    
+                    --print("over forbidden Frame: "..v:GetName())
                 end
             end
         end

@@ -118,6 +118,7 @@ local countButtons = 0
 					bar.Buttons[i]:Show();
 				end	
 
+				MB.Bars:ClearSlots(bar);
 				--[[
 					Store in AllowedFrames for drag and drop usage
 				]]
@@ -236,12 +237,13 @@ local countButtons = 0
 
 				--[[
 					Store in AllowedFrames for drag and drop usage
+
+					if MB.Bars.AllowedFrames then
+						print(#MB.Bars.AllowedFrames)
+					end
 				]]
 				for i=1, #bar.Buttons - 1 do
 					tinsert(MB.Bars.AllowedFrames, bar.Buttons[i])
-				end
-				if MB.Bars.AllowedFrames then
-					print(#MB.Bars.AllowedFrames)
 				end
 				--[[
 					Add Toggle Button for the button bag
@@ -274,10 +276,8 @@ local countButtons = 0
 								local slot = bar.Buttons[v.SlotID]
 								local prevParent = grabbedButton:GetParent();
 											
-								if tContains(bar.Buttons, prevParent) then
-									prevParent.isEmpty = true;
-									prevParent.MinimapButton = nil;
-								end
+								prevParent.isEmpty = true;
+								prevParent.MinimapButton = nil;
 
 								slot.isEmpty = false;
 								slot.MinimapButton = grabbedButton;

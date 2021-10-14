@@ -80,3 +80,11 @@ end
 function MB.Bars:GetBarByName(Name)
     return getBarByName(Name);
 end
+function MB.Bars:ClearSlots(bar)
+    local slots = bar.Buttons;
+
+    for i=1, #slots do
+        slots[i].isEmpty = true;
+        slots[i].MinimapButton = nil;
+    end
+end
