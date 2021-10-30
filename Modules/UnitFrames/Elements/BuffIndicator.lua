@@ -231,7 +231,15 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 			end
 
 			-- Just get our Threshold Groups only -> Ignore the rest
-			local extractedSettings = GetItemsByKeys(settings, {'thresholdGroup1','thresholdGroup2','thresholdGroup3','thresholdGroup4','thresholdGroup5'})
+			local tGroupsToExtract = {}
+			for i = 1, settings.numOfThresholds do 
+				for k,v in pairs(settings) do 
+					if k == "thresholdGroup"..i then
+						tGroupsToExtract[i] = "thresholdGroup"..i;
+					end
+				end
+			end
+			local extractedSettings = GetItemsByKeys(settings, tGroupsToExtract)
 			
 			-- Only handle enabled Threshold Groups
 			extractedSettings = FilterEnabledThresholdGroups(extractedSettings)

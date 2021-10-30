@@ -13,6 +13,10 @@ KP.general = {
 }
 KP.filterExtension = {
 	enabled = true,
+	addOrRemoveThresholdGroup = {
+		thresholdTimedColorsGroup = {
+		},
+	},
 }
 
 KP.microBar = {
