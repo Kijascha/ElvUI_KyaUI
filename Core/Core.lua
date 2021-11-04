@@ -44,6 +44,7 @@ KYA.BS = KYA:IsAddOnEnabled("BugSack")
 KYA.MUI = KYA:IsAddOnEnabled("ElvUI_MerathilisUI")
 KYA.WT = KYA:IsAddOnEnabled("ElvUI_WindTools")
 KYA.NP = KYA:IsAddOnEnabled("NeatPlates")
+KYA.MRT = KYA:IsAddOnEnabled("MRT")
 
 local function PrintURL(url) -- Credit: Azilroka
 	return format("|cFF00c0fa[|Hurl:%s|h%s|h]|r", url, url)
