@@ -65,6 +65,7 @@ local countButtons = 0
 
 		if event == "PLAYER_ENTERING_WORLD" then
 			MB.Core:GrabMinimapButtons()
+
 			if MB.Bars.ToggleButtonBag then
 				MB.Bars.ButtonGrid:Hide();
 			end
@@ -236,7 +237,7 @@ local countButtons = 0
 				end
 
 				--[[
-					Store in AllowedFrames for drag and drop usage
+						Store in AllowedFrames for drag and drop usage
 
 					if MB.Bars.AllowedFrames then
 						print(#MB.Bars.AllowedFrames)

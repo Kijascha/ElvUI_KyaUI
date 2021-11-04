@@ -36,13 +36,15 @@ local function SaveButtonListToDB(buttonList)
 end
 local function buttonExists(Button)
     if not Button then return false end
+    --if not type(Button) == "Button" then return false end
     if not Button.GetName then return false end
 
     for buttonName, button in pairs(MB.GrabbedMinimapButtons) do
         if buttonName == Button:GetName() and button == Button then 
             return true
         end
-    end
+    end 
+    --if tContains(MB.GrabbedMinimapButtons, Button) then return true end 
     return false;
 end
 local function getButtonKey(Button)    
@@ -79,6 +81,10 @@ local function getMinimapButtonIcon(IconName)
 	local IconPath = "Interface\\AddOns\\ElvUI_KyaUI\\Media\\Textures\\Icons\\MinimapButtons\\";
 	local ending = ".tga";
 	return (IconPath..IconName..ending);
+end
+
+function MB.Core:AddButton(Button)
+    return addButton(Button);
 end
 --[[---------------------------------------
             Create Buttons
@@ -155,13 +161,18 @@ function MB.Core:SkinGrabbedMinimapButton(Button)
 
     for i=1, Button:GetNumRegions() do
         local Region = select(i, Button:GetRegions())
-        local texture = nil
-        if Region.GetTexture then texture = Region:GetTexture() end
-        
-        for j=1, #texturesToRemove do
-            if Region:GetTexture() == texturesToRemove[j] then
-                Region:SetTexture(nil)
-                Region:SetAlpha(0)
+        if Region.IsObjectType and Region:IsObjectType('Texture') then
+            --local texture = nil
+            local texture = Region.GetTextureFileID and Region:GetTextureFileID()
+            --if Region.GetTexture then texture = Region:GetTexture() end
+            
+            --print(texture.." - "..GetFileIDFromPath(texturesToRemove[2]))
+            
+            for j=1, #texturesToRemove do
+                if texture == GetFileIDFromPath(texturesToRemove[j]) then
+                    Region:SetTexture()
+                    Region:SetAlpha(0)
+                end
             end
         end
     end
@@ -233,22 +244,38 @@ function MB.Core:GrabMinimapButtons()
                 Grab All LibDBIcons
     --------------------------------------------]]
     local n = 1
-	for k,v in pairs(LDBIcon:GetButtonList()) do
-        local button = LDBIcon:GetMinimapButton(v);
+    for _, Frame in pairs({ Minimap, _G.MinimapBackdrop, _G.MinimapCluster }) do
+		local NumChildren = Frame:GetNumChildren() 
+			for i = 1, NumChildren do
+				local object = select(i, Frame:GetChildren())
+				if object then
+					local name = object:GetName()
+					local width = object:GetWidth()
+					if name and width > 15 and width < 60 and (object:IsObjectType('Button') or object:IsObjectType('Frame')) then
+						if strfind(name, "LibDBIcon10_") then
+                            local button = LDBIcon:GetMinimapButton(name) or _G[name];
+                            if button and button.GetName then 
+                                --print("Found: "..button:GetName()); 
 
-        button.isSkinned = false;
-        button.isDraggable = false;
-        button.Name = button:GetName();
-        if addButton(button) then 
-
-            if not button.isSkinned then
-                MB.Core:SkinGrabbedMinimapButton(button);
-                button.isSkinned = true;
-            end
-            if not button.isDraggable then
-                MB.Core:MakeGrabbedMinimapButtonsDraggable(button)
-                button.isDraggable = true;
-            end
-        end
+                                button.isSkinned = false;
+                                button.isDraggable = false;
+                                button.Name = button:GetName();
+                                --print(button.Name) 
+                                if addButton(button) then 
+                        
+                                    if not button.isSkinned then
+                                        MB.Core:SkinGrabbedMinimapButton(button);
+                                        button.isSkinned = true;
+                                    end
+                                    if not button.isDraggable then
+                                        MB.Core:MakeGrabbedMinimapButtonsDraggable(button)
+                                        button.isDraggable = true;
+                                    end
+                                end
+                            end
+                        end
+					end
+				end
+			end
 	end
 end
