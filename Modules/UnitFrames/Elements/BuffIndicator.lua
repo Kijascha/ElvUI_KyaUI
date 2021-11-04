@@ -232,7 +232,9 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 
 			-- Just get our Threshold Groups only -> Ignore the rest
 			local tGroupsToExtract = {}
-			for i = 1, settings.numOfThresholds do 
+			local limit = settings.numOfThresholds
+			if not limit then return end
+			for i = 1, limit do 
 				for k,v in pairs(settings) do 
 					if k == "thresholdGroup"..i then
 						tGroupsToExtract[i] = "thresholdGroup"..i;
