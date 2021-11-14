@@ -10,7 +10,7 @@
 ## SavedVariablesPerCharacter: KYADataPerChar
 ## OptionalDeps: SharedMedia
 ## X-Credits: Merathilis, Benik, Blazeflack, Azilroka, Simpy, NihilisticPandemonium, Darth Predator, fgprodigal, siweia, Solor, Elv
-## X-ElvuiVersion: 12.40
+## X-ElvuiVersion: 12.55
 
 Libraries\Load_Libraries.xml
 Locales\Load_Locales.xml
