@@ -11,7 +11,7 @@ local IsAddOnLoaded = IsAddOnLoaded
 if E.db.kyaui == nil then E.db.kyaui = {} end
 
 local function AddOptions()
-	print(KYA.Title)
+	--print(KYA.Title)
 	E.Options.name = E.Options.name.." + "..KYA.Title..format(": |cFF00c0fa%.1f|r", KYA.Version) -- TO DO: Change Colors of my Name
 
 	local ACD = LibStub("AceConfigDialog-3.0-ElvUI")
