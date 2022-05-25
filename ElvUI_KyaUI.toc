@@ -1,6 +1,6 @@
-## Interface: 90100
+## Interface: 90200
 ## Author: KeYara
-## Version: 0.8
+## Version: 0.90
 ## Title: |cffe3e3e3Kya|cffc74040UI|r
 ## Notes: Contains a custom layout and some features, like a filter extension for the aura indicators.
 ## Notes-deDE: Enthält ein spezielles Layout für ElvUI und einige Features wie eine Filter Erweiterung für die Aura Indikatoren.
