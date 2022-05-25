@@ -64,10 +64,12 @@ local function GetItemsByKeys(t, keys)
 	end)
 	return extractedTable
 end
-local function FilterEnabledThresholdGroups(t)
+local function FilterEnabledThresholdGroups(t,thresholdType)
 	local t2 = {}	
 	table.foreach(t,function(k,v)
-		if v.enabled then
+		if thresholdType == "remainingTime" and v.remainingTime > 0 then
+			t2[k] = v
+		elseif thresholdType == "elapsedTime" and v.elapsedTime > 0 then
 			t2[k] = v
 		end
 	end)
@@ -83,7 +85,7 @@ end
 	 		SelectionSort(t) -> Descended Sort
 	 		SelectionSort(t, false) -> Descended Sort
 	]] 
-local function SelectionSort(t, ASC)
+local function SelectionSort(t, thresholdType, ASC)
 	local index_klein, wert, wert_klein;
 	-- Schleife wird von links nach rechts durchlaufen. 
 	for index = 1, #t, 1 do
@@ -95,13 +97,22 @@ local function SelectionSort(t, ASC)
 		* das kleinste Element.]]
 	   	for index_klein = index+1, #t do
 			-- Ein kleineres Element gefunden?			
-			
-			if ASC and ASC == true and (t[index_klein].colorThreshold < t[wert].colorThreshold) then
-				-- Neues kleinstes Element
-				wert=index_klein;
-			elseif not ASC and (t[index_klein].colorThreshold > t[wert].colorThreshold) then
-				-- Neues kleinstes Element
-				wert=index_klein;
+			if thresholdType == "remainingTime" then
+				if ASC and ASC == true and (t[index_klein].remainingTime < t[wert].remainingTime) then
+					-- Neues kleinstes Element
+					wert=index_klein;
+				elseif not ASC and (t[index_klein].remainingTime > t[wert].remainingTime) then
+					-- Neues kleinstes Element
+					wert=index_klein;
+				end
+			elseif thresholdType == "elapsedTime" then	
+				if ASC and ASC == true and (t[index_klein].elapsedTime < t[wert].elapsedTime) then
+					-- Neues kleinstes Element
+					wert=index_klein;
+				elseif not ASC and (t[index_klein].elapsedTime > t[wert].elapsedTime) then
+					-- Neues kleinstes Element
+					wert=index_klein;
+				end
 			end
 		end
 	   	--[[kleinstes Element an die aktuelle
@@ -185,12 +196,18 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 		
 		local onlyText = settings.style == 'timerOnly' -- schwellenwerte für diese Option hinzufügen
 		local colorIcon = settings.style == 'coloredIcon'
+		local colorStaticIcon = settings.style == 'coloredStaticIcon'
 		local textureIcon = settings.style == 'texturedIcon'
+		local coloredWatchIcon = settings.style == 'coloredWatchIcon'
 
-		if (colorIcon or textureIcon) and not button.icon:IsShown() then
+		if (colorIcon or textureIcon or coloredWatchIcon) and not button.icon:IsShown() then
 			button.icon:Show()
 			button.icon.border:Show()
 			button.cd:SetDrawSwipe(true)
+		elseif colorStaticIcon and not button.icon:IsShown() then			
+			button.icon:Show()
+			button.icon.border:Show()
+			button.cd:SetDrawSwipe(false)
 		elseif onlyText and button.icon:IsShown() then
 			button.icon:Hide()
 			button.icon.border:Hide()
@@ -222,9 +239,13 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 		end
 
 
+
 		if colorIcon then
 			button.icon:SetTexture(E.media.blankTex)
 			button.icon:SetVertexColor(settings.color.r, settings.color.g, settings.color.b)
+		elseif coloredWatchIcon then
+			button.icon:SetTexture(E.media.blankTex)
+			button.icon:SetVertexColor(settings.color.r, settings.color.g, settings.color.b)	
 
 			if settings.isStatic == true then
 				button.cd:Hide();
@@ -232,44 +253,55 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 
 			-- Just get our Threshold Groups only -> Ignore the rest
 			local tGroupsToExtract = {}
-			local limit = settings.numOfThresholds
+			local limit = settings.colorCount
+			local thresholdType = settings.coloringBasedOnType
+
 			if not limit then return end
-			for i = 1, limit do 
-				for k,v in pairs(settings) do 
-					if k == "thresholdGroup"..i then
-						tGroupsToExtract[i] = "thresholdGroup"..i;
+			if limit > 1 then
+				for i = 1, limit do 
+					for k,v in pairs(settings) do 
+						if k == "threshold"..i.."Values" then
+							tGroupsToExtract[i] = "threshold"..i.."Values";
+						end
 					end
 				end
-			end
-			local extractedSettings = GetItemsByKeys(settings, tGroupsToExtract)
-			
-			-- Only handle enabled Threshold Groups
-			extractedSettings = FilterEnabledThresholdGroups(extractedSettings)
+				local extractedSettings = GetItemsByKeys(settings, tGroupsToExtract)
+				-- Only handle enabled Threshold Groups
+				extractedSettings = FilterEnabledThresholdGroups(extractedSettings, thresholdType)
 
-			-- Turn the table into an indexed one -> Removes all keys and replaces them with indices
-			extractedSettings = ToIndexedTable(extractedSettings)
+				-- Turn the table into an indexed one -> Removes all keys and replaces them with indices
+				extractedSettings = ToIndexedTable(extractedSettings)
 
-			-- Perform a selection sort to bring them in the right order
-			extractedSettings = SelectionSort(extractedSettings)
-	
-			if not UF.db.filterExtension.enabled then
-				table.foreach(extractedSettings, function(k,v)
-					--v.enabled = false  
-				end)
-			end
-			button:SetScript('OnUpdate', function(self)
-				if self.cd.timer then
-					local current = self.cd.timer.endTime-GetTime()			
+				-- Perform a selection sort to bring them in the right order
+				extractedSettings = SelectionSort(extractedSettings,thresholdType)
 		
+				if not UF.db.filterExtension.enabled then
 					table.foreach(extractedSettings, function(k,v)
-						if UF.db.filterExtension.enabled and v.enabled then	
-							if current <= v.colorThreshold then
-								button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
-							end
-						end
+						--v.enabled = false  
 					end)
 				end
-			end)			
+				button:SetScript('OnUpdate', function(self)
+					if self.cd.timer then
+						local current = self.cd.timer.endTime-GetTime()	
+						table.foreach(extractedSettings, function(k,v)
+							if not UF.db.filterExtension.enabled then return end
+
+							if thresholdType == "remainingTime" then
+								if current <= v.remainingTime then
+									button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
+								end
+							elseif thresholdType == "elapsedTime" then	
+								--[[
+									TODO: perform an action according to the elapsed pattern;
+								]]
+								if current <= v.elapsedTime then
+									button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
+								end
+							end
+						end)
+					end
+				end)
+			end		
 		elseif textureIcon then
 			button.icon:SetVertexColor(1, 1, 1)
 			button.icon:SetTexCoord(unpack(E.TexCoords))

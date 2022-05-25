@@ -24,8 +24,11 @@ function UF:Initialize()
 	UF.Filters.quickSearchText = ''
 	UF.Filters.selectedFilter = nil
 	UF.Filters.selectedSpell = nil
+	UF.Filters.selectedColorCount = nil
+	UF.Filters.selectedColoringBasedOnType = nil
 	UF.Filters.selectedStyle = nil
 	UF.Filters.spellName = nil
+	UF.Filters.colorCountList = {}
 	UF.Filters.filterList = {}
 	UF.Filters.spellList = {}
 	
