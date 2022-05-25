@@ -334,7 +334,20 @@ L["Creates a Global Cooldown Bar"] = true
 L["UnitFrame Style"] = true
 L["Adds my styling to the Unitframes if you use transparent health."] = true
 L["Change the default role icons."] = true
-
+-- Unitframes - Filter Extension
+L["Colored Static Icon"] = true
+L["Colored Watch Icon"] = true
+L["Filter Extension"] = true
+L["Filter Extension Desc"] = "Enable some enhanced features for the filter (Aura Indicator) section, inspired by Grid2 e.g. a colored watch icon with colored thresholds or a static colored icon"
+L["Select filters"] = true
+L["No filter selected"] = true
+L["Selected filter: %s"] = true
+L["Selected filter: %s - Selected spell: %s (%s)"] = true
+L["Selected filter: %s - No selected spell"] = true
+L["Threshold configuration"] = true
+L["Number of stacks"] = true
+L["Remaining time"] = true
+L["Elapsed time"] = true
 -- LocationPanel
 L["Location Panel"] = true
 L["Update Throttle"] = true
