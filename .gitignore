@@ -1,1 +1,8 @@
 Media/Textures/Icons/MinimapButtons/MinimapButtonSack.tga
+Core/DataTypes/Class.lua
+Core/DataTypes/DataTypes.lua
+Core/DataTypes/Enum.lua
+Core/DataTypes/String.lua
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
