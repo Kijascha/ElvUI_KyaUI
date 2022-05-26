@@ -11,7 +11,10 @@ local function barExists(Bar)
     if not bar.GetName then return false end
 
     for barName, bar in pairs(MB.Bars) do
-        print(barName);
+        
+        if MB.DeveloperMode then
+            print(barName);
+        end
         if barName == Bar:GetName() and bar == Bar then 
             return true
         end

@@ -8,3 +8,4 @@ MB.DragAndDrop.Scripts = MB.DragAndDrop.Scripts or {};
 MB.DragAndDrop.RangeX = 15;
 MB.DragAndDrop.RangeY = 15;
 MB.DragAndDrop.Sticky = MB.DragAndDrop.Sticky or {};
+MB.DragAndDrop.RegisteredMinimapButtons = MB.DragAndDrop.RegisteredMinimapButtons or {}

@@ -150,7 +150,9 @@ function MB.Core:SetParentForGrabbedMinimapButton(Button, Parent)
     if not Button then return end
     if not Parent then return end
     if Button == Parent then return end
-    print(Parent:GetName())
+    if MB.DeveloperMode then
+        print(Parent:GetName())
+    end
     Button:SetParent(Parent)
     Button:SetPoint("CENTER",Parent,"CENTER",0, 0);
     Button:SetFrameStrata(Parent:GetFrameStrata())
@@ -240,6 +242,7 @@ function MB.Core:MakeGrabbedMinimapButtonsDraggable(Button)
    end)
 end
 function MB.Core:GrabMinimapButtons()
+    
     --[[----------------------------------------
                 Grab All LibDBIcons
     --------------------------------------------]]

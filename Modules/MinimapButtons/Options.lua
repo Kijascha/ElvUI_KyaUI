@@ -205,7 +205,11 @@ local function MinimapButtonsOptions()
             end,
             set = function(info, value)
                 local selectedButton = get(info).args.buttons.selected
-                if selectedButton then print(get(info).args.buttons.get(get(info).args.buttons)) end
+                if selectedButton then                     
+                    if MB.DeveloperMode then
+                        print(get(info).args.buttons.get(get(info).args.buttons)) 
+                    end
+                end
 
                 set(info, value);
             end, 

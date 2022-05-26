@@ -1,0 +1,9 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file="Core.lua"/>    
+    <Include file="LoadTemplates.xml"/>
+    <Script file="CreateButtonBagToggleButton.lua"/>
+    <Script file="CreateSlot.lua"/>
+    <Script file="SetParent.lua"/>
+    <Script file="SkinMinimapButton.lua"/>
+    <Script file="GrabMinimapButtons.lua"/>
+</Ui>

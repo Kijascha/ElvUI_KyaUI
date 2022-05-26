@@ -52,7 +52,10 @@ local countButtons = 0
 		local infoType, info1 = GetCursorInfo()
 
 		if self:IsMouseOver(true) then 
-			print(tostring(info1))
+			
+            if MB.DeveloperMode then
+				print(tostring(info1))
+			end
 		end
 	end	
 	local function OnDragStart(self)
@@ -65,7 +68,8 @@ local countButtons = 0
 
 		if event == "PLAYER_ENTERING_WORLD" then
 			MB.Core:GrabMinimapButtons()
-
+			--if MB.DragAndDrop then MB.DragAndDrop:GrabMinimapButtons() end
+			
 			if MB.Bars.ToggleButtonBag then
 				MB.Bars.ButtonGrid:Hide();
 			end
@@ -342,6 +346,8 @@ local countButtons = 0
 
 -- [[ Public Constructor ]]
 	function MB:Initialize()
+		-- set DeveloperMode
+		MB.DeveloperMode = false;
 		-- set ProfileDB
 		MB.db = E.db.kyaui.minimapButtons
 		if not MB.db.bars.buttonGrid.buttons then MB.db.bars.buttonGrid.buttons = {} end
