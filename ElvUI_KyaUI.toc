@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ## Interface: 90200
+=======
+## Interface: 90105
+>>>>>>> b5621f7e9325bef6fdbba417df35713d8c41ca6d
 ## Author: KeYara
 ## Version: 0.90
 ## Title: |cffe3e3e3Kya|cffc74040UI|r
@@ -10,7 +14,7 @@
 ## SavedVariablesPerCharacter: KYADataPerChar
 ## OptionalDeps: SharedMedia
 ## X-Credits: Merathilis, Benik, Blazeflack, Azilroka, Simpy, NihilisticPandemonium, Darth Predator, fgprodigal, siweia, Solor, Elv
-## X-ElvuiVersion: 12.40
+## X-ElvuiVersion: 12.55
 
 Libraries\Load_Libraries.xml
 Locales\Load_Locales.xml
