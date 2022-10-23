@@ -9,6 +9,10 @@ if not MB.MicroButtons then MB.MicroButtons = {} end
 
 local gradientPacks = MB.Utils.Colors.GradientPacks;
 
+function MB:SetColorGradient(button, orientation , gradientPack)
+	if not gradientPack then return end
+	button.Texture:SetGradient(orientation, gradientPack.From, gradientPack.To)
+end
 function MB:CreateButton(buttonName)
     if not MB.db then return end
     if not MB.MicroBar.Buttons then MB.MicroBar.Buttons = {} end
@@ -49,8 +53,9 @@ function MB:HandleButton(button)
 	button.Texture:SetPoint("BOTTOMLEFT", button, 2,2)
 	button.Texture:SetBlendMode('BLEND') --make texture same size as button
 	button.Texture:SetSize(button:GetSize(), button:GetSize())
-	button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
-
+	
+	MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
+	
 	button:SetScript("OnUpdate", function(self,elapsed) 
         MB.Events:OnUpdate(self,elapsed);
     end)

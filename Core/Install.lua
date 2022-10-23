@@ -41,28 +41,34 @@ function KYA:SetupDataBars() -- Seperate InstallPage
 	E.db["movers"] = E.db["movers"] or {}
 	E.db["general"]["bottomPanel"] = true
 
-	E.db["databars"]["transparent"] = true
-	E.db["databars"]["customTexture"] = true
-	E.db["databars"]["statusbar"] = "KyaOnePixel"
+	E.db.databars["transparent"] = true
+	E.db.databars["customTexture"] = true
+	E.db.databars["statusbar"] = "KyaOnePixel"
 
 	for _, databar in pairs({ 'experience', 'reputation', 'honor', 'azerite'}) do
-		E.db["databars"][databar]["enable"] = true
-		E.db["databars"][databar]["width"] = 380
-		E.db["databars"][databar]["height"] = 20
-		E.db["databars"][databar]["textFormat"] = 'CURPERCREM'
-		E.db["databars"][databar]["fontSize"] = 12
-		E.db["databars"][databar]["textYoffset"] = 8
-		E.db["databars"][databar]["font"] = "Continuum Medium"
-		E.db["databars"][databar]["fontOutline"] = 'OUTLINE'
-		E.db["databars"][databar]["mouseover"] = false
-		E.db["databars"][databar]["orientation"] = 'HORIZONTAL'
-		E.db["databars"][databar]["reverseFill"] = false
-		E.db["databars"][databar]["hideInCombat"] = false
-		E.db["databars"][databar]["hideInVehicle"] = false
+		E.db.databars[databar].enable = true
+		E.db.databars[databar].width = 380
+		E.db.databars[databar].height = 20
+		E.db.databars[databar].textFormat = 'CURPERCREM'
+		E.db.databars[databar].fontSize = 12
+		E.db.databars[databar].font = "Continuum Medium"
+		E.db.databars[databar].fontOutline = 'OUTLINE'
+		E.db.databars[databar].xOffset = 0
+		E.db.databars[databar].yOffset = 0
+		E.db.databars[databar].displayText = true
+		E.db.databars[databar].anchorPoint = 'CENTER'
+		E.db.databars[databar].mouseover = false
+		E.db.databars[databar].clickThrough = false
+		E.db.databars[databar].hideInCombat = false
+		E.db.databars[databar].orientation = 'HORIZONTAL'
+		E.db.databars[databar].reverseFill = false
+		E.db.databars[databar].showBubbles = false
+		E.db.databars[databar].frameStrata = 'LOW'
+		E.db.databars[databar].frameLevel = 1		 
 	end
 
-	E.db["databars"]["honor"]["hideOutsidePvP"] = false
-	E.db["databars"]["experience"]["hideAtMaxLevel"] = false
+	E.db.databars['honor'].hideOutsidePvP = false
+	E.db.databars['experience'].hideAtMaxLevel = false
 
 	E.db["movers"]["HonorBarMover"] = "BOTTOMRIGHT,ElvUIParent,BOTTOMRIGHT,0,0"
 	E.db["movers"]["AzeriteBarMover"] = "BOTTOMLEFT,ElvUIParent,BOTTOMLEFT,0,0"

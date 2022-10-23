@@ -29,7 +29,7 @@ function MB.MicroButtons:LFDMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G["PVEFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -45,7 +45,7 @@ function MB.MicroButtons:LFDMicroButton(button)
 			self.isShown = _G["PVEFrame"]:IsShown()
 			MB.Events:OnMouse(self)
 			_G["PVEFrame"].CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

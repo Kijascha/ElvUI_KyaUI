@@ -34,7 +34,7 @@ function MB.MicroButtons:GuildMicroButton(button)
                 MB.Events:OnMouse(button)
             end)
             _G["CommunitiesFrame"]:HookScript("OnHide", function(self)
-                button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
                 button.isShown = false
                 button.isMouseEnter = false	
                 button.isMouseLeave = false	
@@ -50,7 +50,7 @@ function MB.MicroButtons:GuildMicroButton(button)
             self.isShown = _G["CommunitiesFrame"]:IsShown()
             MB.Events:OnMouse(self)
             _G["CommunitiesFrame"].CloseButton:HookScript("OnClick",function(self)
-                button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
                 button.isShown = false
                 button.isMouseEnter = false	
                 button.isMouseLeave = false	

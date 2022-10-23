@@ -29,7 +29,7 @@ function MB.MicroButtons:CollectionsMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G["CollectionsJournal"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:Alpha(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -45,7 +45,7 @@ function MB.MicroButtons:CollectionsMicroButton(button)
 			self.isShown = _G["CollectionsJournal"]:IsShown()
 			MB.Events:OnMouse(self)	
 			_G["CollectionsJournal"].CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

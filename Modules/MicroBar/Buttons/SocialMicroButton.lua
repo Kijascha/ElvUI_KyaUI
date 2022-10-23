@@ -29,7 +29,7 @@ function MB.MicroButtons:SocialMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G["FriendsFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -38,7 +38,6 @@ function MB.MicroButtons:SocialMicroButton(button)
 			end)
 		end
 		if KeybindFrames_InQuickKeybindMode() then
-			button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Pushed))
 		end
 		button:SetScript('OnClick', function(self)
 			if InCombatLockdown() then
@@ -48,7 +47,7 @@ function MB.MicroButtons:SocialMicroButton(button)
 			self.isShown = _G["FriendsFrame"]:IsShown()
 			MB.Events:OnMouse(self)
 			_G["FriendsFrame"].CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

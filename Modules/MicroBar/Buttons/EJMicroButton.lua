@@ -30,7 +30,7 @@ function MB.MicroButtons:EJMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G["EncounterJournal"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -46,7 +46,7 @@ function MB.MicroButtons:EJMicroButton(button)
 			self.isShown = _G["EncounterJournal"]:IsShown()
 			MB.Events:OnMouse(self)
 			_G["EncounterJournal"].CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

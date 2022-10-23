@@ -30,7 +30,7 @@ function MB.MicroButtons:TalentMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G.PlayerTalentFrame:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -47,7 +47,7 @@ function MB.MicroButtons:TalentMicroButton(button)
 			MB.Utils:GetCurrentTalentSpecialization()
 			MB.Events:OnMouse(self)		
 			_G.PlayerTalentFrame.CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

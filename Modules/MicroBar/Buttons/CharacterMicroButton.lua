@@ -32,8 +32,8 @@ function MB.MicroButtons:CharacterMicroButton(button)
                 button.isShown = _G["CharacterFrame"]:IsShown()
                 MB.Events:OnMouse(button)
             end)
-            _G["CharacterFrame"]:HookScript("OnHide", function(self)
-                button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+            _G["CharacterFrame"]:HookScript("OnHide", function(self)			
+                MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
                 button.isShown = false
                 button.isMouseEnter = false	
                 button.isMouseLeave = false	
@@ -48,8 +48,8 @@ function MB.MicroButtons:CharacterMicroButton(button)
             _G["ToggleCharacter"]("PaperDollFrame")
             self.isShown = _G["CharacterFrame"]:IsShown()
             MB.Events:OnMouse(self)
-            _G["CharacterFrame"].CloseButton:HookScript("OnClick",function(self)
-                button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+            _G["CharacterFrame"].CloseButton:HookScript("OnClick",function(self)			
+                MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
                 button.isShown = false
                 button.isMouseEnter = false	
                 button.isMouseLeave = false	

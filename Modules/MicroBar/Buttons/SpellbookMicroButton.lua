@@ -28,8 +28,8 @@ function MB.MicroButtons:SpellbookMicroButton(button)
 				button.isShown = _G["SpellBookFrame"]:IsShown()
 				MB.Events:OnMouse(button)
 			end)
-			_G["SpellBookFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+			_G["SpellBookFrame"]:HookScript("OnHide", function(self)			
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -44,8 +44,8 @@ function MB.MicroButtons:SpellbookMicroButton(button)
 			_G["ToggleSpellBook"](BOOKTYPE_SPELL)
 			self.isShown = _G["SpellBookFrame"]:IsShown()
 			MB.Events:OnMouse(self)			
-			_G["SpellBookFrame"].CloseButton:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+			_G["SpellBookFrame"].CloseButton:HookScript("OnClick",function(self)			
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

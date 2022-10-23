@@ -23,8 +23,8 @@ function MB.MicroButtons:StoreMicroButton(button)
 		button.Texture:SetTexture(MB.Utils:GetMicroBarIcon("Store"))
 
 		button.tooltipText = BLIZZARD_STORE; 
-		if (not C_StorePublic.IsEnabled() and GetCurrentRegionName() == 'US') then
-			button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Disabled))
+		if (not C_StorePublic.IsEnabled() and GetCurrentRegionName() == 'US') then		
+			MB:SetColorGradient(button, "VERTICAL", gradientPacks.Disabled)
 			button:SetScript('OnEnter', function(self)
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
 				GameTooltip_SetTitle(GameTooltip,button.tooltipText)

@@ -34,8 +34,8 @@ function MB.MicroButtons:QuestLogMicroButton(button)
 				button.isShown = _G["WorldMapFrame"]:IsShown()
 				MB.Events:OnMouse(button)
 			end)
-			_G["WorldMapFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+			_G["WorldMapFrame"]:HookScript("OnHide", function(self)	
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -51,7 +51,7 @@ function MB.MicroButtons:QuestLogMicroButton(button)
 			self.isShown = (_G["WorldMapFrame"]:IsShown() and _G["QuestScrollFrame"]:IsShown())
 			MB.Events:OnMouse(self)			
 			_G["WorldMapFrameCloseButton"]:HookScript("OnClick",function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

@@ -19,9 +19,9 @@ local GetNetStats = GetNetStats
 if not MB.Events then MB.Events = {} end
 function MB.Events:OnKeyDown(button,keyPressed)
 	if keyPressed then
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))
+		MB:SetColorGradient(button, "VERTICAL", MB.Utils.Colors.GradientPacks.Pushed)
 	else
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Normal))
+		MB:SetColorGradient(button, "VERTICAL", MB.Utils.Colors.GradientPacks.Normal)
 	end
 end
 
@@ -51,31 +51,38 @@ function MB.Events:OnMouse(button)
 		MB.Events:OnKeyDown(button, false)
 		return
 	end
+	local normalFrom = MB.Utils.Colors.GradientPacks.Normal.From
+	local normaTo = MB.Utils.Colors.GradientPacks.Normal.To
+	local highlightFrom = MB.Utils.Colors.GradientPacks.Highlight.From
+	local highlightTo = MB.Utils.Colors.GradientPacks.Highlight.To
+	local pushedFrom = MB.Utils.Colors.GradientPacks.Pushed.From
+	local pushedTo = MB.Utils.Colors.GradientPacks.Pushed.To
+
 	if isMouseUp and isMouseOverAndIsShown then	-- MouseUp and MouseOver and Frame is shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Highlight))
+		button.Texture:SetGradient("VERTICAL", highlightFrom, highlightTo)
 	elseif isMouseUp and isMouseOverAndNotIsShown then
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Highlight))
+		button.Texture:SetGradient("VERTICAL", highlightFrom, highlightTo)
 	elseif isMouseDown and isMouseOverAndIsShown then	-- MouseDown and MouseOver and Frame is shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))
+		button.Texture:SetGradient("VERTICAL", pushedFrom, pushedTo)
 	elseif isMouseDownAndIsShown then	-- Mousedown and Frame is shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))	
+		button.Texture:SetGradient("VERTICAL", pushedFrom, pushedTo)
 	elseif isMouseDownAndNotIsShown then	-- Mousedown and Frame is not shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))	
+		button.Texture:SetGradient("VERTICAL", pushedFrom, pushedTo)
 	elseif isMouseUpAndIsShown then	-- MouseUp and Frame is shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))	
+		button.Texture:SetGradient("VERTICAL", pushedFrom, pushedTo)
 	elseif isMouseUpAndNotIsShown then	-- MouseUp and Frame is not shown
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Normal))
+		button.Texture:SetGradient("VERTICAL", normalFrom, normalTo)
 	elseif isMouseOverAndIsShown then
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Highlight))
+		button.Texture:SetGradient("VERTICAL", highlightFrom, highlightTo)
 	elseif isNotMouseOverAndIsShown then
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Pushed))
+		button.Texture:SetGradient("VERTICAL", pushedFrom, pushedTo)
 	elseif isMouseOverAndNotIsShown then
-		button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Highlight))
+		button.Texture:SetGradient("VERTICAL", highlightFrom, highlightTo)
 	else
 		if isMouseOver then	
-			button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Highlight))
+		button.Texture:SetGradient("VERTICAL", highlightFrom, highlightTo)
 		else
-			button.Texture:SetGradientAlpha("VERTICAL", unpack(MB.Utils.Colors.GradientPacks.Normal))
+			button.Texture:SetGradient("VERTICAL", normalFrom, normalTo)
 		end			
 	end
 end

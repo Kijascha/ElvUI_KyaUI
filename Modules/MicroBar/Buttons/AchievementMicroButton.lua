@@ -27,8 +27,8 @@ function MB.MicroButtons:AchievementMicroButton(button)
 				button.isShown = _G["AchievementFrame"]:IsShown()
 				MB.Events:OnMouse(button)
 			end)
-			_G["AchievementFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+			_G["AchievementFrame"]:HookScript("OnHide", function(self)			
+				MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	
@@ -44,8 +44,8 @@ function MB.MicroButtons:AchievementMicroButton(button)
 			self.isShown = _G["AchievementFrame"]:IsShown()
 			MB.Events:OnMouse(self)
 			if _G["AchievementFrameCloseButton"] then
-				_G["AchievementFrameCloseButton"]:HookScript("OnClick",function(self)
-					button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				_G["AchievementFrameCloseButton"]:HookScript("OnClick",function(self)					
+					MB:SetColorGradient(button, "VERTICAL", gradientPacks.Normal)
 					button.isShown = false
 					button.isMouseEnter = false	
 					button.isMouseLeave = false	

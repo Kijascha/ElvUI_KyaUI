@@ -57,7 +57,7 @@ function MB.MicroButtons:MainMenuMicroButton(button)
 				MB.Events:OnMouse(button)
 			end)
 			_G["GameMenuFrame"]:HookScript("OnHide", function(self)
-				button.Texture:SetGradientAlpha("VERTICAL", unpack(gradientPacks.Normal))
+				MB:SetColorGradient("VERTICAL", gradientPacks.Normal)
 				button.isShown = false
 				button.isMouseEnter = false	
 				button.isMouseLeave = false	

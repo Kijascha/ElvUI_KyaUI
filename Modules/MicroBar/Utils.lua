@@ -20,7 +20,7 @@ local GetSpecialization = GetSpecialization
 if not MB.Utils then MB.Utils = {} end
 
 MB.Utils.Colors = {}
-MB.Utils.Colors.Normal = { r = 1, g = 1, b = 1 }
+MB.Utils.Colors.Base = CreateColor(1, 1, 1, 1)
 MB.Utils.Colors.Class = E:ClassColor(E.myclass, true)
 MB.Utils.Colors.Hover = { r = MB.Utils.Colors.Class.r, g = MB.Utils.Colors.Class.g, b = MB.Utils.Colors.Class.b }
 MB.Utils.Colors.Status = {
@@ -28,47 +28,23 @@ MB.Utils.Colors.Status = {
 	'|cffE8DA0F',
 	'|cffFF9000',
 	'|cffD80909'
-}
+} 
 MB.Utils.Colors.GradientPacks = {}
 MB.Utils.Colors.GradientPacks.Normal = {
-	.5 * MB.Utils.Colors.Normal.r,
-	.5 * MB.Utils.Colors.Normal.g,
-	.5 * MB.Utils.Colors.Normal.b,
-	.9,
-	1 * MB.Utils.Colors.Normal.r,
-	1 * MB.Utils.Colors.Normal.g,
-	1 * MB.Utils.Colors.Normal.b,
-	.9
+	From = CreateColor(.5 * MB.Utils.Colors.Base.r, .5 * MB.Utils.Colors.Base.b, .5 * MB.Utils.Colors.Base.b, .9),
+	To = CreateColor(1 * MB.Utils.Colors.Base.r, 1 * MB.Utils.Colors.Base.g, 1 * MB.Utils.Colors.Base.b, .9)
 }
 MB.Utils.Colors.GradientPacks.Highlight = {
-	.5 * MB.Utils.Colors.Hover.r,
-	.5 * MB.Utils.Colors.Hover.g,
-	.5 * MB.Utils.Colors.Hover.b,
-	.9,
-	1 * MB.Utils.Colors.Hover.r,
-	1 * MB.Utils.Colors.Hover.g,
-	1 * MB.Utils.Colors.Hover.b,
-	.9
+	From = CreateColor(.5 * MB.Utils.Colors.Hover.r, .5 * MB.Utils.Colors.Hover.b, .5 * MB.Utils.Colors.Hover.b, .9),
+	To = CreateColor(1 * MB.Utils.Colors.Hover.r, 1 * MB.Utils.Colors.Hover.g, 1 * MB.Utils.Colors.Hover.b, .9)
 }
 MB.Utils.Colors.GradientPacks.Pushed = {
-	1 * MB.Utils.Colors.Hover.r,
-	1 * MB.Utils.Colors.Hover.g,
-	1 * MB.Utils.Colors.Hover.b,
-	.9,
-	.5 * MB.Utils.Colors.Hover.r,
-	.5 * MB.Utils.Colors.Hover.g,
-	.5 * MB.Utils.Colors.Hover.b,
-	.9
+	From = CreateColor(1 * MB.Utils.Colors.Hover.r, 1 * MB.Utils.Colors.Hover.g, 1 * MB.Utils.Colors.Hover.b, .9),
+	To = CreateColor(.5 * MB.Utils.Colors.Hover.r, .5 * MB.Utils.Colors.Hover.g, .5 * MB.Utils.Colors.Hover.b, .9)
 }
 MB.Utils.Colors.GradientPacks.Disabled = {
-	.2 * MB.Utils.Colors.Normal.r,
-	.2 * MB.Utils.Colors.Normal.g,
-	.2 * MB.Utils.Colors.Normal.b,
-	.9,
-	.7 * MB.Utils.Colors.Normal.r,
-	.7 * MB.Utils.Colors.Normal.g,
-	.7 * MB.Utils.Colors.Normal.b,
-	.9
+	From = CreateColor(.2 * MB.Utils.Colors.Base.r, .2 * MB.Utils.Colors.Base.g, .2 * MB.Utils.Colors.Base.b, .9),
+	To = CreateColor(.7 * MB.Utils.Colors.Base.r, .7 * MB.Utils.Colors.Base.g, .7 * MB.Utils.Colors.Base.b, .9)
 }
 
 MB.Utils.GenderCodes = { uni = 1, male = 2, female = 3}

@@ -10,7 +10,7 @@ local CreateFrame = CreateFrame
 local function DisableElvUI_MicroBar()
 	if E.db.actionbar.microbar.enabled then
 		E.db.actionbar.microbar.enabled=false
-		ElvMB:UpdateMicroPositionDimensions()
+		ElvMB:UpdateMicroButtons()
 	end
 end
 
