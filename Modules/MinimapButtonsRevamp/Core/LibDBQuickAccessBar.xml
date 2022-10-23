@@ -1,0 +1,50 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="LibDBQuickAcccessBar.lua"/>
+
+	<Frame name="LibDBQuickAcccessBarSlotEventsFrame" mixin="LibDBQuickAcccessBarSlotEventsFrameMixin">
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnEvent method="OnEvent"/>
+		</Scripts>
+	</Frame>
+    
+	<Frame name="LibDBQuickAcccessBarFrame" parentKey="UIParent">
+		<Anchors>
+	    	<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER" x="0" y="0"/>
+		</Anchors>
+	</Frame>
+
+	<CheckButton name="LibDBSlot1" inherits="LibDBSlotTemplate" parent="LibDBQuickAcccessBarFrame" id="1">
+		<KeyValues>
+			<KeyValue key="commandName" value="LIBDBSLOT1" type="string"/>
+		</KeyValues>
+		<Anchors>
+			<Anchor point="BOTTOMLEFT" relativeTo="LibDBQuickAcccessBarFrame" x="0" y="0"/>
+		</Anchors>
+	</CheckButton>
+	<CheckButton name="LibDBSlot2" inherits="LibDBSlotTemplate" parent="LibDBQuickAcccessBarFrame" id="2">
+		<KeyValues>
+			<KeyValue key="commandName" value="LIBDBSLOT2" type="string"/>
+		</KeyValues>
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="LibDBSlot1" relativePoint="RIGHT" x="6" y="0"/>
+		</Anchors>
+	</CheckButton>
+	<CheckButton name="LibDBSlot3" inherits="LibDBSlotTemplate" parent="LibDBQuickAcccessBarFrame" id="3">
+		<KeyValues>
+			<KeyValue key="commandName" value="LIBDBSLOT3" type="string"/>
+		</KeyValues>
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="LibDBSlot2" relativePoint="RIGHT" x="6" y="0"/>
+		</Anchors>
+	</CheckButton>
+	<CheckButton name="LibDBSlot4" inherits="LibDBSlotTemplate" parent="LibDBQuickAcccessBarFrame" id="4">
+		<KeyValues>
+			<KeyValue key="commandName" value="LIBDBSLOT4" type="string"/>
+		</KeyValues>
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="LibDBSlot3" relativePoint="RIGHT" x="6" y="0"/>
+		</Anchors>
+	</CheckButton>
+
+</Ui>

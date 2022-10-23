@@ -119,12 +119,16 @@ function MB.MicroButtons:MainMenuMicroButton(button)
 				local errors = self:GetErrors(BugGrabber:GetSessionId());
 				if #errors > 0 then
 					button.bsNotify.Texture:SetColorTexture(200/255, 80/255, 80/255,225/255); 
+				else
+					button.bsNotify.Texture:SetColorTexture(85/255, 200/255, 85/255,225/255); 
 				end
 			end)
 			hooksecurefunc(BugSack,"Reset", function(self)
 				local errors = self:GetErrors(BugGrabber:GetSessionId());
 				if #errors > 0 then
 					button.bsNotify.Texture:SetColorTexture(200/255, 80/255, 80/255,225/255); 
+				else
+					button.bsNotify.Texture:SetColorTexture(85/255, 200/255, 85/255,225/255); 
 				end
 			end)
 		end

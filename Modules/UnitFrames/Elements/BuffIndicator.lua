@@ -67,10 +67,11 @@ end
 local function FilterEnabledThresholdGroups(t,thresholdType)
 	local t2 = {}	
 	table.foreach(t,function(k,v)
-		if thresholdType == "remainingTime" and v.remainingTime > 0 then
-			t2[k] = v
-		elseif thresholdType == "elapsedTime" and v.elapsedTime > 0 then
-			t2[k] = v
+		--if type(v) =="table" then table.foreach(v,print) end
+		if thresholdType == "remainingTime" and v.remainingTime then				
+				t2[k] = v
+		elseif thresholdType == "elapsedTime" and v.elapsedTime then
+				t2[k] = v
 		end
 	end)
 	return t2
@@ -188,12 +189,12 @@ function UF:BuffIndicator_PostCreateIcon(button)
 
 end
 
-function UF:BuffIndicator_PostUpdateIcon(unit, button)
+function UF:BuffIndicator_PostUpdateIcon(_, button)
  if not UF.db then UF.db.kyaui = E.db.kyaui end
 	local settings = self.watched[button.spellID]
 
+	
 	if settings then -- This should never fail.		
-		
 		local onlyText = settings.style == 'timerOnly' -- schwellenwerte für diese Option hinzufügen
 		local colorIcon = settings.style == 'coloredIcon'
 		local colorStaticIcon = settings.style == 'coloredStaticIcon'
@@ -244,6 +245,7 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 			button.icon:SetTexture(E.media.blankTex)
 			button.icon:SetVertexColor(settings.color.r, settings.color.g, settings.color.b)
 		elseif coloredWatchIcon then
+			
 			button.icon:SetTexture(E.media.blankTex)
 			button.icon:SetVertexColor(settings.color.r, settings.color.g, settings.color.b)	
 
@@ -267,6 +269,7 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 				end
 				local extractedSettings = GetItemsByKeys(settings, tGroupsToExtract)
 				-- Only handle enabled Threshold Groups
+				
 				extractedSettings = FilterEnabledThresholdGroups(extractedSettings, thresholdType)
 
 				-- Turn the table into an indexed one -> Removes all keys and replaces them with indices
@@ -280,27 +283,29 @@ function UF:BuffIndicator_PostUpdateIcon(unit, button)
 						--v.enabled = false  
 					end)
 				end
-				button:SetScript('OnUpdate', function(self)
-					if self.cd.timer then
-						local current = self.cd.timer.endTime-GetTime()	
-						table.foreach(extractedSettings, function(k,v)
-							if not UF.db.filterExtension.enabled then return end
+				
+				if button.cd.timer then
+						
+					local current = button.cd.timer.endTime-GetTime()				
+					
+					table.foreach(extractedSettings, function(k,v)
+						--if not UF.db.filterExtension.enabled then return end
 
-							if thresholdType == "remainingTime" then
-								if current <= v.remainingTime then
-									button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
-								end
-							elseif thresholdType == "elapsedTime" then	
-								--[[
-									TODO: perform an action according to the elapsed pattern;
-								]]
-								if current <= v.elapsedTime then
-									button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
-								end
+						if thresholdType == "remainingTime" and v.remainingTime then
+							if current <= v.remainingTime then
+								button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
 							end
-						end)
-					end
-				end)
+						elseif thresholdType == "elapsedTime" and v.elapsedTime then	
+							--[[
+								TODO: perform an action according to the elapsed pattern;
+							]]
+
+							if current <= v.elapsedTime then
+								button.icon:SetVertexColor(v.color.r, v.color.g, v.color.b)
+							end
+						end
+					end)
+				end
 			end		
 		elseif textureIcon then
 			button.icon:SetVertexColor(1, 1, 1)

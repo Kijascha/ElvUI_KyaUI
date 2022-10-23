@@ -1,0 +1,19 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="LibDBButtonBagToggleButton.lua" />    
+	<CheckButton name="LibDBButtonBagToggleButtonCodeTemplate" inherits="SecureActionButtonTemplate, QuickKeybindButtonTemplate" virtual="true" mixin="LibDBButtonBagToggleButtonMixin">
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnEvent method="OnEvent"/>
+			<!-- <OnClick method="OnClick" inherit="append"/> -->
+			<!-- <OnReceiveDrag method="OnReceiveDrag"/> -->
+			<OnDragStart method="OnDragStart"/>
+			<OnDragStop method="OnDragStop"/>
+			<OnEnter method="OnEnter" inherit="append"/>
+			<OnLeave method="OnLeave" inherit="append"/>
+			<!-- <OnLeave method="OnLeave" inherit="append"/>
+			<OnUpdate method="OnUpdate" inherit="append"/> -->
+		</Scripts>
+	</CheckButton>
+	<CheckButton name="LibDBButtonBagToggleButtonTemplate" inherits="LibDBButtonBagToggleButtonTemplate, ActionButtonTemplate" virtual="true"/>
+    
+</Ui>

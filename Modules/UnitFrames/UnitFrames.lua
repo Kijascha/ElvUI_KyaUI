@@ -34,18 +34,10 @@ function UF:Initialize()
 	
 	UF.Filters.isStatic = true;
 
-	--[[for k,v in pairs(ElvUI_UF) do
+	-- for k,v in pairs(ElvUI_UF) do
 		
-		print(tostring(k))
-	end
-	table.foreach(ElvUF.objects, function(k,v)	
-		if v.AuraWatch then
-			table.foreach(v.AuraWatch, function(i,t)
-					v.AuraWatch.PostUpdateIcon = UF.BuffIndicator_PostUpdateIcon
-					v.AuraWatch.PostCreateIcon = UF.BuffIndicator_PostCreateIcon
-			end)
-		end
-	end)]]
+	-- 	print(tostring(k))
+	-- end
 	ElvUI_UF.BuffIndicator_PostUpdateIcon = UF.BuffIndicator_PostUpdateIcon
 	ElvUI_UF.BuffIndicator_PostCreateIcon = UF.BuffIndicator_PostCreateIcon
 end

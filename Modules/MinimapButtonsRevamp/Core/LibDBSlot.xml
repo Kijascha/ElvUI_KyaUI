@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="LibDBSlot.lua" />    
+	<CheckButton name="LibDBSlotCodeTemplate" inherits="SecureActionButtonTemplate, QuickKeybindButtonTemplate" virtual="true" mixin="LibDBSlotMixin">
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnEvent method="OnEvent"/>
+			<!-- <OnClick method="OnClick" inherit="append"/> -->
+			<OnReceiveDrag method="OnReceiveDrag"/>
+			<OnEnter method="OnEnter" inherit="append"/>
+			<OnLeave method="OnLeave" inherit="append"/>
+			<!-- <OnLeave method="OnLeave" inherit="append"/>
+			<OnUpdate method="OnUpdate" inherit="append"/> -->
+		</Scripts>
+	</CheckButton>
+	<CheckButton name="LibDBSlotTemplate" inherits="LibDBSlotCodeTemplate, ActionButtonTemplate" virtual="true"/>
+    
+</Ui>

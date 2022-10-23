@@ -2,5 +2,6 @@
 	<!-- <Include file="DataBars\Load_DataBars.xml"/> -->
 	<Include file="MicroBar\Load_MicroBar.xml"/>
 	<Include file="MinimapButtons\Load_MinimapButtons.xml"/>
+	<!-- <Include file="MinimapButtonsRevamp\Load_MinimapButtonsRevamp.xml"/> -->
 	<Include file="UnitFrames\Load_UnitFrames.xml"/>
 </Ui>

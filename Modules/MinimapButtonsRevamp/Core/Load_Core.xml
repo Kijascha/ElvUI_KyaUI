@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="Core.lua"/>
+    <Script file="CreateBar.lua"/>
+    <Include file="LibDBSlot.xml"/>
+    <Include file="LibDBButton.xml"/>
+    <Script file="ToggleButton.lua"/>
+    <Include file="LibDBButtonBagToggleButton.xml"/>
+    <Script file="LibDB_QuickAccessBar.lua"/>
+    <!-- <Include file="LibDBQuickAccessBar.xml"/> -->
+    <Script file="LibDBButtonBag.lua"/>
+</Ui>

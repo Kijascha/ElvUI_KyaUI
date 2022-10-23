@@ -6,6 +6,8 @@ function KYA:TextureString(texString, dataString)
 	return '|T'..texString..(dataString or '')..'|t'
 end
 
+LSM:Register('background','SWTorMenuBar',M..[[Textures\StarwarsMod\SWTor_MenuBar.tga]])
+
 LSM:Register('statusbar','KyaOnePixel',M..[[Textures\BuiOnePixel.tga]])
 
 LSM:Register('font','Gotham Heavy',M..[[Fonts\KMT-Gotham Heavy.ttf]])

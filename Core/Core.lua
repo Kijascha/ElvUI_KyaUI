@@ -50,6 +50,10 @@ local function PrintURL(url) -- Credit: Azilroka
 	return format("|cFF00c0fa[|Hurl:%s|h%s|h]|r", url, url)
 end
 
+--[[
+	TODO:
+		- add my own pre-defined color functions for various cases
+]]
 function KYA:cOption(name)
 	local color = "|cffff7d0a%s |r"
 	return (color):format(name)

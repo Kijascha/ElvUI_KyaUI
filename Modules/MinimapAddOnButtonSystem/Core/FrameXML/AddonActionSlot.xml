@@ -1,0 +1,17 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="AddonActionSlotMixin.lua"/>
+	<CheckButton name="AddonActionSlotCodeTemplate" inherits="SecureActionButtonTemplate, QuickKeybindButtonTemplate" virtual="true" mixin="AddonActionSlotMixin">
+		<Scripts>
+			<OnLoad method="OnLoad"/>
+			<OnEvent method="OnEvent"/>
+			<OnReceiveDrag method="OnReceiveDrag"/>
+			<OnClick method="OnMouseClick" inherit="append"/>
+			<OnEnter method="OnMouseEnter" inherit="append"/>
+			<OnLeave method="OnMouseLeave" inherit="append"/>
+			<OnMouseDown method="OnMouseDown" inherit="append"/>
+			<OnMouseUp method="OnMouseUp" inherit="append"/>
+		</Scripts>
+	</CheckButton>
+	<CheckButton name="AddonActionSlotTemplate" inherits="AddonActionSlotCodeTemplate, ActionButtonTemplate" virtual="true"/>
+    
+</Ui>

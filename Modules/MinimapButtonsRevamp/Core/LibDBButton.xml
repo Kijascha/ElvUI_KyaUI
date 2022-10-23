@@ -1,0 +1,4 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="LibDBButton.lua"/>
+    <CheckButton name="LibDBButtonTemplate" inherits="SecureActionButtonTemplate, ActionButtonTemplate" mixin="LibDBButtonMixin" virtual="true"/>
+</Ui>

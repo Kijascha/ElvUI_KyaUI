@@ -30,10 +30,12 @@ KYA.Erelease = tonumber(GetAddOnMetadata("ElvUI_KyaUI", "X-ElvuiVersion"))
 
 do
 	E:AddLib('LDI', 'LibDBIcon-1.0')
+	E:AddLib('LDB', 'LibDataBroker-1.1')
 end
 
 KYA.MicroBar = KYA:NewModule('MicroBar','AceHook-3.0','AceEvent-3.0')
 KYA.MinimapButtons = KYA:NewModule('MinimapButtons','AceEvent-3.0','AceHook-3.0','AceTimer-3.0')
+KYA.MinimapButtonsRevamp = KYA:NewModule('MinimapButtonsRevamp','AceEvent-3.0','AceHook-3.0','AceTimer-3.0')
 KYA.UnitFrames = KYA:NewModule('UnitFrames','AceTimer-3.0','AceEvent-3.0','AceHook-3.0')
 KYA.DataBars = KYA:NewModule('DataBars','AceEvent-3.0')
 
